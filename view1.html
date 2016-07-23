@@ -22,17 +22,46 @@
 
 <div style="float: left;clear: left;padding: 10px;">
   <input type="date" id="create-gameDate" />
-  <button style="margin: 0 0 0 10px">Create new game</button><br/>
+  <button id="button1" style="margin: 0 0 0 10px">Button 1 - Create game</button><br/>
 </div>
 
 <div style="float: left;clear: left;padding: 10px;">
   <input type="date" id="view-gameDate" />
-  <button style="margin: 0 0 0 10px">View game</button><br/>
+  <button id="button2" style="margin: 0 0 0 10px">Button 2 - View game</button><br/>
 </div>
 
 <div style="float: left;clear: left;padding: 10px;">
   <input type="date" id="delete-gameDate" />
-  <button style="margin: 0 0 0 10px">Delete game</button><br/>
+  <button id="button3" style="margin: 0 0 0 10px">Button 3 - Delete game</button><br/>
+</div>
+
+<script>
+var buttonCreate = document.querySelector('#button1')
+var buttonView = document.querySelector('#button2')
+var buttonDelete = document.querySelector('#button3')
+
+buttonCreate.addEventListener('click', function(event){
+  console.log('button Create clicked')  // click check
+  console.log('Button Text: ' + event.target.innerHTML) // clicke button text check 
+})
+
+buttonView.addEventListener('click', function(event){
+  console.log('button Create clicked')
+  console.log(event.target) //logs out the clicked element
+})
+
+buttonDelete.addEventListener('click', function(event){
+  console.log('button Create clicked')
+  console.log(event.target) //logs out the clicked element
+})
+</script>
+
+
+
+
+
+
+
 </div>
 
 
