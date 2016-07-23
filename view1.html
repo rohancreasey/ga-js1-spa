@@ -35,31 +35,22 @@
   <button id="button3" style="margin: 0 0 0 10px">Button 3 - Delete game</button><br/>
 </div>
 
+
+
 <script>
 var createGame = document.querySelector('#button1');
 createGame.addEventListener("click", doSomething, false);
 
 function doSomething(callback) {
-  var dateCreate = document.getElementById("create-gameDate").value;  // get selected date, assign to dateCreate
-  var defaultValue = dateCreate.defaultValue;
-  var currentValue = dateCreate.value  
+  var dateCreate = document.getElementById("create-gameDate").value;  // get selected date, assign to dateCreate 
+    console.log(dateCreate);  // check
 
-  console.log(dateCreate);
-  console.log(defaultValue);
-  console.log(currentValue);
-    // document.getElementById("demo").innerHTML = x;
+// check date selected
    if (dateCreate == '') {
-//      return console.log(true);
       alert('Please select a date.');
     }  
-      return console.log(dateCreate);
- //     return alert('Please select a date.');
-         
+      return console.log(dateCreate);     
 }
-
-
-
-
 
 </script>
 
