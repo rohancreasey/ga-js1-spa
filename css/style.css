@@ -8,3 +8,163 @@ html {
 
 // --- Your styles here ---
 
+
+
+/* Page layout */
+html {
+  height: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: ghostwhite;
+}
+body {
+  min-height: 100%;
+  background-color: white;
+  padding: 1em;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+}
+
+/* General styles */
+.wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+
+
+/* Header styles */
+/* ADJUSTED 
+background-color
+added border
+*/
+header {
+  background-color: #220099;  
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-top: 5px solid red;
+}
+
+/* ADJUSTED 
+float to right
+  vertical-align: middle;
+removed width: 16%;
+removed   padding: 10px 2%;
+removed   padding-left: 0;
+*/
+header h1 {
+  color: #FFF;
+  margin: 0;
+  float: right;
+  padding: 3% 0 0 0;
+}
+
+/* Header navigation bar */
+/* ADJUSTED 
+float to left
+removed   width: 76%;
+
+*/
+header nav {
+  padding: 10px 0;
+  float: left;
+  text-align: right;
+  line-height: 30px;
+  margin-top: 0;
+  position: relative;
+  vertical-align: middle;
+}
+
+/* Search bar */
+header #search {
+  float: right;
+  line-height: 0; /* Kill trailing whitespace */
+}
+
+header #search #search-icon {
+  display: inline-block;
+  padding: 10px;
+}
+
+header #search img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+header #search input {
+  border: none;
+  width: 300px;
+  padding: 0 12px;
+  font-size: 16px;
+  line-height: 40px;
+  transition: 0.2s all;
+  vertical-align: top;
+}
+
+header nav a {
+  display:block;
+  padding:0 10px;
+  color:#FFF;
+  font-size:16px;
+  line-height: 40px;
+  text-decoration:none;
+  transition: 0.2s all;
+}
+
+header nav a:hover {
+  background-color: #fff;
+  color: #CC0020;
+}
+
+nav ul {
+  float: right;
+  padding:0;
+  margin:0;
+  margin-right: 10px;
+  list-style: none;
+  position: relative;
+  }
+
+nav ul li {
+  display:inline-block;
+  background-color: #CC0020;
+  position: relative;
+}
+
+nav ul ul {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  margin-right: 0;
+}
+
+/* Display Dropdowns on Hover */
+nav ul li:hover > ul {
+  display:inherit;
+}
+
+/* First Tier Dropdown */
+nav ul ul li {
+  width:170px;
+  float:none;
+  display:list-item;
+  position: relative;
+}
+
+/* Main Section */
+#main {
+  margin-top: 65px;
+}
+
+
+
+/* Radio boxes */
+
+
+
+
+
+
