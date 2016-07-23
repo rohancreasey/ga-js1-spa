@@ -36,64 +36,37 @@
 </div>
 
 <script>
-var buttonCreate = document.querySelector('#button1')
-var buttonView = document.querySelector('#button2')
-var buttonDelete = document.querySelector('#button3')
+var createGame = document.querySelector('#button1');
+createGame.addEventListener("click", doSomething, false);
 
-buttonCreate.addEventListener('click', function(event){
-  console.log('button Create clicked')  // click check
-  console.log('Button Text: ' + event.target.innerHTML) // clicke button text check 
-})
+function doSomething(callback) {
+  var dateCreate = document.getElementById("create-gameDate").value;  // get selected date, assign to dateCreate
+  var defaultValue = dateCreate.defaultValue;
+  var currentValue = dateCreate.value  
 
-buttonView.addEventListener('click', function(event){
-  console.log('button Create clicked')
-  console.log(event.target) //logs out the clicked element
-})
+  console.log(dateCreate);
+  console.log(defaultValue);
+  console.log(currentValue);
+    // document.getElementById("demo").innerHTML = x;
+   if (dateCreate == '') {
+//      return console.log(true);
+      alert('Please select a date.');
+    }  
+      return console.log(dateCreate);
+ //     return alert('Please select a date.');
+         
+}
 
-buttonDelete.addEventListener('click', function(event){
-  console.log('button Create clicked')
-  console.log(event.target) //logs out the clicked element
-})
+
+
+
+
 </script>
-
-
-
 
 
 
 
 </div>
-
-
-<!--
-  
-DATE
-
-<input type="date" id="myDate" value="2014-02-09">
-
-<p>Click the button to get the date of the date field.</p>
-
-<button onclick="myFunction()">Try it</button>
-
-<p><strong>Note:</strong> input elements with type="date" do not show as any date field/calendar in Firefox.</p>
-
-<p id="demo"></p>
-
-<script>
-function myFunction() {
-    var x = document.getElementById("myDate").value;
-    document.getElementById("demo").innerHTML = x;
-}
-</script>
-
-
-
--->
-
-
-
-  </div>
-
 
 
 
