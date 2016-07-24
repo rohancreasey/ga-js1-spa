@@ -17,17 +17,7 @@
               { 
                 name : 'teamRED',
                 coach : 'Coachy McCoach',
-                players : ['Rohan Creasey','Amy Simmons','Jess Telford','Lauren Bliss','Ryan Baynes','Jack Huang','Irene Kurniawan']
-              },
-	            { 
-                name : 'teamBLUE',
-                coach : 'Denzel Washington',
-                players : ['Brooke Bliss','Adele Hanzlicek','Ken Ji','June Sung','Yogesh Sehgal','Priya Darshal','Liam Lucas']
-              },
-              { 
-                name : 'teamYELLOW',
-                coach : 'Jurgen Klopp',
-                players : ['Lorus Karius','Joel Matip','Emre Can','Gigi Wijnaldum','Mamadho Sakho','Phillipe Coutinho','Sadio Mane','Jordan Henderson']
+                players : ['Han Solo','Luke Skywalker','Chewie Bacca','Lando Calrission','Princess Leia','Obi Wan Kenobi','Admiral Ackbar']
               }
             ],
     players : ['Rohan Creasey','Amy Simmons','Jess Telford','Lauren Bliss','Ryan Baynes','Jack Huang','Irene Kurniawan']
