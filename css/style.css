@@ -8,6 +8,14 @@ html {
 
 // --- Your styles here ---
 
+/* VIEW 1 - Game Choices */
+.gameChoiceButtons {
+  float: left;
+  clear: left;
+  padding: 10px;
+}
+
+
 
 
 /* Page layout */
