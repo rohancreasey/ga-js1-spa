@@ -19,7 +19,8 @@
           players : ['Han Solo','Luke Skywalker','Chewie Bacca','Lando Calrissian','Leia Organa','Obi-Wan Kenobi','Admiral Ackbar']
         }
         ],
-    players : []
+    players : [],
+    quoteOfDay : []    
     }
 
 
@@ -32,7 +33,7 @@ function render(data, into) {
   renderHeader(state, header);    // render header
   renderGameChoices(state, container);   // render home page buttons
   //renderPlayerContainer(state, container);    // render player list container
-
+  fetchQuotes();
 
 
 // HEADER CODE
@@ -202,6 +203,28 @@ function deleteGameFunction(gameDate) {
 // firebase.database().ref('teams/').on('value', function(snapshot) {
 //   console.log(snapshot.val());
 // });
+
+
+
+// FETCH QUOTES (max 10 per hour)
+
+function fetchQuotes(){
+	  fetch('http://quotes.rest/qod.json?category=inspire')
+	    .then(function(response) {
+	      return response.json();
+	    }).then(function(dataAsJson) {
+          console.log(dataAsJson);
+          // loop through data
+          dataAsJson.contents.quotes.forEach((item) => {
+	        var quotesObject = {}
+          quotesObject.author = item.author
+          quotesObject.quote = item.quote
+          //   // push to array
+          state.quoteOfDay.push(quotesObject);
+          console.log(state.quoteOfDay);
+	  })
+      // renderArticleListContainer(state, container)
+	})};
 
 
 
