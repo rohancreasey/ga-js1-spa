@@ -11,6 +11,21 @@
 </head>
 <body>
 
+<!-- Firebase Code -->
+
+<script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBj2uZQdGOraZh-QRmHM07boCxq0uVlXzo",
+    authDomain: "rohancreasey-project1.firebaseapp.com",
+    databaseURL: "https://rohancreasey-project1.firebaseio.com",
+    storageBucket: "",
+  };
+  firebase.initializeApp(config);
+</script>
+
+
   <header>
     <!-- JS will render the nav bar area -->
 
@@ -39,17 +54,22 @@
 
 <script>
 var createGame = document.querySelector('#button1');
+
 createGame.addEventListener("click", doSomething, false);
 
 function doSomething(callback) {
   var dateCreate = document.getElementById("create-gameDate").value;  // get selected date, assign to dateCreate 
-    console.log(dateCreate);  // check
+    console.log('Selected date: ' + dateCreate);  // check
 
 // check date selected
    if (dateCreate == '') {
       alert('Please select a date.');
     }  
-      return console.log(dateCreate);     
+      else firebase.database().ref('games/').push({
+        date: dateCreate
+      });
+      console.log('Date sent to database: ' + dateCreate);    // check
+
 }
 
 </script>
