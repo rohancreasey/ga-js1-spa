@@ -16,19 +16,24 @@
     teams : [
               { 
                 name : 'teamRED',
+                coach : 'Coachy McCoach',
                 players : ['Rohan Creasey','Amy Simmons','Jess Telford','Lauren Bliss','Ryan Baynes','Jack Huang','Irene Kurniawan']
               },
 	            { 
                 name : 'teamBLUE',
-                players : []
+                coach : 'Denzel Washington',
+                players : ['Brooke Bliss','Adele Hanzlicek','Ken Ji','June Sung','Yogesh Sehgal','Priya Darshal','Liam Lucas']
               },
               { 
                 name : 'teamYELLOW',
-                players : []
+                coach : 'Jurgen Klopp',
+                players : ['Lorus Karius','Joel Matip','Emre Can','Gigi Wijnaldum','Mamadho Sakho','Phillipe Coutinho','Sadio Mane','Jordan Henderson']
               }
             ],
-    players : ['Rohan Creasey','Amy Simmons','Jess Telford','Lauren Bliss','Ryan Baynes','Jack Huang','Irene Kurniawan']    
+    players : ['Rohan Creasey','Amy Simmons','Jess Telford','Lauren Bliss','Ryan Baynes','Jack Huang','Irene Kurniawan']
+      
   }
+
 
   render(state, container)
 
@@ -135,6 +140,85 @@ firebase.database().ref('players/').push({
         }
 */
 
+// VIEW 1 -- BUTTON CHOICE
+
+
+
+// function renderGameChoices(state, container){
+//   container.innerHTML = `
+// 	    <div class="gameChoicesDiv">
+// 	      <input type="date" id="create-gameDate" />
+// 	      <button id="button1" class="gameChoiceButton">Button 1 - Create game</button><br/>
+//       </div>
+
+// 	    <div class="gameChoicesDiv">
+//         <input type="date" id="view-gameDate" />
+//         <button id="button2" class="gameChoiceButton">Button 2 - View game</button><br/>
+//       </div>
+
+// 	    <div class="gameChoicesDiv">
+//         <input type="date" id="delete-gameDate" />
+//         <button id="button3" class="gameChoiceButton">Button 3 - Delete game</button><br/>
+//       </div>
+//   `
+// }
+
+
+var createGame = document.querySelector('#button1');
+createGame.addEventListener("click", createNewGameFunction, false);
+
+// Create New Game Function
+function createNewGameFunction(gameDate) {
+  var dateCreate = document.getElementById('create-gameDate').value;  // get selected date, assign to dateCreate 
+    // console.log('Selected date: ' + dateCreate);  // check
+
+    if (dateCreate != '') {
+        firebase.database().ref('games/' + dateCreate).push({ // push new game date
+          team: 'teamRED',
+        });
+      console.log('Date added to database: ' + dateCreate);    // check
+    }
+
+   else {  // check - if no date selected, alert
+      alert('Please select a new game date.');
+      
+    }  
+
+}
+
+function writeUserData(userId, name, email) {
+  firebase.database().ref('users/' + userId).set({
+    username: name,
+    email: email
+  });
+}
+
+
+var deleteGameButton = document.querySelector('#button3');
+deleteGameButton.addEventListener('click', deleteGameFunction, false);
+
+// Delete game function
+function deleteGameFunction(gameDate) {
+  var dateDelete = document.getElementById('delete-gameDate').value; // get value of delete date
+    console.log('Selected date: ' + dateDelete);  // check
+
+    if (dateDelete != '') {
+      firebase.database().ref('games/' +dateDelete).set({
+        //dateDelete : {
+        
+        //}
+      });
+      console.log('Game date deleted from database: ' + dateDelete);    // check
+    } else {
+        alert('Did you mean to select a game date to delete?');
+    }
+}
+
+// firebase.database().ref('teams/').on('value', function(snapshot) {
+//   console.log(snapshot.val());
+// });
+
+
 // VIEW 2 -- TEAM PLAYER LIST
 
 function renderPlayer(item) { // renders Player name
@@ -191,9 +275,11 @@ function renderPlayerContainer(state, container) {
 
 //call functions
 
-
 renderHeader(state, header);    // render header
-renderPlayerContainer(state, container);    // render container
+
+// renderGameChoices(state, container);   // render home page buttons
+
+//renderPlayerContainer(state, container);    // render player list container
 
 
 
