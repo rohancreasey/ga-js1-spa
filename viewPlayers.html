@@ -77,14 +77,14 @@ var state = {
 firebase.database().ref('players/').on('value', function(snapshot) {
     state.players = snapshot.val();
     console.log(state);
-    renderList(state, document.querySelector('#container'))
+    renderPlayerList(state, document.querySelector('#container'))
 });
 
-function renderList(data, into) {
-    var display = '';
+function renderPlayerList(data, into) {
+    var playerList = '';
     Object.keys(data.players).forEach((element) => {
-//        display += `<li data-id="${el}">${data.players[el].name}</li>`
-/*        display += `
+//        playerList += `<li data-id="${el}">${data.players[el].name}</li>`
+/*        playerList += `
             <ul class="playerList">
               <li>
                 <form action="">
@@ -97,13 +97,13 @@ function renderList(data, into) {
             </ul>
             `
  */
-          display += `<ul>
+          playerList += `<ul>
 
                         <li><span>${data.players[element].name}&nbsp;&nbsp;</span><input type="radio" name="attendance" value="present">&nbsp;P&nbsp;<input type="radio" name="attendance" value="absentExplained">&nbsp;EA&nbsp;<input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA&nbsp;</li>
                       </ul>`
    });
     console.log('done'); 
-    into.innerHTML = display;  
+    into.innerHTML = playerList;  
 }
 
 </script>

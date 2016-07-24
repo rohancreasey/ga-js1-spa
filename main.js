@@ -39,10 +39,12 @@ renderGameChoices(state, container);   // render home page buttons
 
 // HEADER CODE
 
-// Drop Down Menu - currently pulling list of teams.name
+// Drop Down Menu - currently pulling list of groups
 // change to: 'Home // Teams // Edit Games // ...?
 function renderDropDownItem(item) {
-      return `<a href="#">${item.name}</a>`
+	    // return `<a href="#">${item.name}</a>`
+	    return `<span id="${item}"><a href="#">${item}</a></span>` 
+      
 }
 
 // Header 
@@ -52,7 +54,7 @@ function renderHeader(state, header) {
       `
         <section class="wrapper">
 	        <div id="title"  style="float:right;">
-            <a href="#"><h1>Roster App</h1></a>
+            <a href="#"><h1>Roster Application</h1></a>
           </div>
             <nav>
               <section id="search">
@@ -62,7 +64,7 @@ function renderHeader(state, header) {
               <ul>
                 <li><a href="#">Team: <span></span></a>
                   <ul>
-                      ${state.teams.map((item) => {
+                      ${state.groups.map((item) => {
                           //return renderDropDownItem function
                             return `<li>${renderDropDownItem(item)}</li>`
                       }).join('')}
@@ -74,6 +76,40 @@ function renderHeader(state, header) {
 	      </section>
      `
 }
+
+// TEAM SELECTION FUNCTIONS
+
+delegate('ul', 'click', 'a', (event) => {
+    var id = event.target.id.value;
+    console.log(event.delegateTarget);
+    //firebase.database().ref('tasks/' + id).remove();
+    // renderList(state, document.querySelector('ul'));
+});
+
+
+// var choseTeam = document.querySelector('header');
+// choseTeam.addEventListener("click", choseTeamFunction, false);
+
+// // // Create New Game Function
+// function choseTeamFunction(team) {
+// 	var chosenTeam = document.header.getElementById('#item').value;  // get selected date, assign to dateCreate 
+
+  
+//     // console.log('Selected date: ' + dateCreate);  // check
+
+//     if (dateCreate != '') {
+//         firebase.database().ref('games/' + dateCreate).push({ // push new game date
+//           team: 'teamRED',
+//         });
+//       console.log('Date added to database: ' + dateCreate);    // check
+//     }
+
+//    else {  // check - if no date selected, alert
+//       alert('Please select a new game date.');
+      
+//     }  
+
+// }
 
 
 
