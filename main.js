@@ -17,10 +17,10 @@
               { 
                 name : 'teamRED',
                 coach : 'Coachy McCoach',
-                players : ['Han Solo','Luke Skywalker','Chewie Bacca','Lando Calrission','Princess Leia','Obi Wan Kenobi','Admiral Ackbar']
+                players : ['Han Solo','Luke Skywalker','Chewie Bacca','Lando Calrissian','Leia Organa','Obi-Wan Kenobi','Admiral Ackbar']
               }
             ],
-    players : ['Rohan Creasey','Amy Simmons','Jess Telford','Lauren Bliss','Ryan Baynes','Jack Huang','Irene Kurniawan']
+    players : []
       
   }
 

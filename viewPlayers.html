@@ -45,7 +45,19 @@
     </ul>-->
 
       <div class="todo-list">
-    List here: <ul></ul> 
+    List here: 
+
+    <!--<ul class="playerList">
+      <li>
+        <form action="">
+          <li class="playerListPlayerName">Player Name</li>
+          <li><input type="radio" name="attendance" value="present">&nbsp;P</li>
+          <li><input type="radio" name="attendance" value="absentExplained">&nbsp;EA</li>
+          <li><input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA</li>
+        </form>
+      </li>
+    </ul>-->
+
   </div>
 
 
@@ -65,14 +77,31 @@ var state = {
 firebase.database().ref('players/').on('value', function(snapshot) {
     state.players = snapshot.val();
     console.log(state);
-    renderList(state, document.querySelector('ul'))
+    renderList(state, document.querySelector('#container'))
 });
 
 function renderList(data, into) {
     var display = '';
-    Object.keys(data.players).forEach((el) => {
-        display += `<li data-id="${el}">${data.players[el].name}</li>`
-    });
+    Object.keys(data.players).forEach((element) => {
+//        display += `<li data-id="${el}">${data.players[el].name}</li>`
+/*        display += `
+            <ul class="playerList">
+              <li>
+                <form action="">
+                  <li class="playerListPlayerName">${data.players[el].name}</li>
+                  <li><input type="radio" name="attendance" value="present">&nbsp;P</li>
+                  <li><input type="radio" name="attendance" value="absentExplained">&nbsp;EA</li>
+                  <li><input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA</li>
+                </form>
+              </li>
+            </ul>
+            `
+ */
+          display += `<ul>
+
+                        <li><span>${data.players[element].name}&nbsp;&nbsp;</span><input type="radio" name="attendance" value="present">&nbsp;P&nbsp;<input type="radio" name="attendance" value="absentExplained">&nbsp;EA&nbsp;<input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA&nbsp;</li>
+                      </ul>`
+   });
     console.log('done'); 
     into.innerHTML = display;  
 }
