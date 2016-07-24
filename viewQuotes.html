@@ -39,7 +39,7 @@
 <script>
 
 var state = {
-  articles : []
+  quoteOfDay : []
 }
 function fetchQuotes(){
 	  fetch('http://quotes.rest/qod.json?category=inspire')
@@ -49,17 +49,17 @@ function fetchQuotes(){
           console.log(dataAsJson);
           // loop through data
           dataAsJson.contents.quotes.forEach((item) => {
-	        var article = {}
-          article.author = item.author
-          article.quote = item.quote
+	        var quotesObject = {}
+          quotesObject.author = item.author
+          quotesObject.quote = item.quote
           //   article.url = item.data.url
           //   article.impressions = item.data.ups
           //   // article.category = item.data.
           //   // article.description = item.data.
         
           //   // push to array
-          state.articles.push(article);
-          console.log(state.articles);
+          state.quoteOfDay.push(quotesObject);
+          console.log(state.quoteOfDay);
 	  })
       // renderArticleListContainer(state, container)
 	})};
