@@ -201,16 +201,15 @@ deleteGameButton.addEventListener('click', deleteGameFunction, false);
 function deleteGameFunction(gameDate) {
   var dateDelete = document.getElementById('delete-gameDate').value; // get value of delete date
     console.log('Selected date: ' + dateDelete);  // check
-
-    if (dateDelete != '') {
+    if ((dateDelete != '') && confirm("Are you sure you want to delete this game date?") == true) {
       firebase.database().ref('games/' +dateDelete).set({
         //dateDelete : {
         
         //}
       });
       console.log('Game date deleted from database: ' + dateDelete);    // check
-    } else {
-        alert('Did you mean to select a game date to delete?');
+    } else if (dateDelete == '') {
+        alert("Did you mean to select a game date to delete?");
     }
 }
 
