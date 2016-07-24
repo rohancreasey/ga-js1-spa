@@ -40,6 +40,15 @@
   function render(data, into) {
     // TODO
 
+// CALL FUNCTIONS
+renderHeader(state, header);    // render header
+renderGameChoices(state, container);   // render home page buttons
+//renderPlayerContainer(state, container);    // render player list container
+
+
+
+// HEADER CODE
+
 // Drop Down Menu - currently pulling list of teams.name
 // change to: 'Home // Teams // Edit Games // ...?
 function renderDropDownItem(item) {
@@ -83,86 +92,30 @@ function renderHeader(state, header) {
 //   console.log(snapshot.val());
 // });
 
-      // firebase.database().ref('players/name/').on('value', function(snapshot) {
 
-      //         var outputValues = []
-      //         snapshot.forEach((value, key) = > {
-      //                 outputValues.push(` < li > ${
-      //                         value
-      //                     } < /li>`);
-      //   })
+// VIEW 1 -- DEFAULT VIEW -- BUTTON CHOICE
 
-      //   into.innerHTML = outputValues.join('')
-      //   console.log(outputValues);
+function renderGameChoices(state, container){
+  container.innerHTML = `
+	    <div class="gameChoicesDiv">
+	      <input type="date" id="create-gameDate" />
+	      <button id="button1" class="gameChoiceButton">Button 1 - Create game</button><br/>
+      </div>
 
-/* Setting test data
+	    <div class="gameChoicesDiv">
+        <input type="date" id="view-gameDate" />
+        <button id="button2" class="gameChoiceButton">Button 2 - View game</button><br/>
+      </div>
 
-firebase.database().ref('players/').push({
-  name: 'Kym Ferrario',
-  team: {
-      "teamRED" : true,
-      "teamBLUE" : true,
-      "teamYELLOW" : true
-  }
-});
-
-*/
-
-// firebase.database().ref('teams/RED/').push({
-//   coach: 'Coachy McCoach',
-//   members: {
-//       "Lauren Bliss" : true,
-//       "Byron McReady" : true,
-//       "Melissa Shakas" : true
-//   }
-// });
-
-/* working to render team names from Object
-        function renderPlayer(item) {
-            return(
-              `
-                <a href="#">${item.name}</a>
-              `
-              )
-        }
-
-        // renderContainer() that holds list of players inside #container
-        function renderContainer(state, container) {
-          container.innerHTML = `
-            <section id="main" class="wrapper">
-            MOO
-                    ${state.teams.map((item) => {
-                        return `<li>${renderPlayer(item)}</li>`
-                    }).join('')}
-
-            </section>
-          `
-        }
-*/
-
-// VIEW 1 -- BUTTON CHOICE
+	    <div class="gameChoicesDiv">
+        <input type="date" id="delete-gameDate" />
+        <button id="button3" class="gameChoiceButton">Button 3 - Delete game</button><br/>
+      </div>
+  `
+}
 
 
-
-// function renderGameChoices(state, container){
-//   container.innerHTML = `
-// 	    <div class="gameChoicesDiv">
-// 	      <input type="date" id="create-gameDate" />
-// 	      <button id="button1" class="gameChoiceButton">Button 1 - Create game</button><br/>
-//       </div>
-
-// 	    <div class="gameChoicesDiv">
-//         <input type="date" id="view-gameDate" />
-//         <button id="button2" class="gameChoiceButton">Button 2 - View game</button><br/>
-//       </div>
-
-// 	    <div class="gameChoicesDiv">
-//         <input type="date" id="delete-gameDate" />
-//         <button id="button3" class="gameChoiceButton">Button 3 - Delete game</button><br/>
-//       </div>
-//   `
-// }
-
+// ADD GAME ACTIONS
 
 var createGame = document.querySelector('#button1');
 createGame.addEventListener("click", createNewGameFunction, false);
@@ -186,13 +139,7 @@ function createNewGameFunction(gameDate) {
 
 }
 
-function writeUserData(userId, name, email) {
-  firebase.database().ref('users/' + userId).set({
-    username: name,
-    email: email
-  });
-}
-
+// DELETE GAME ACTIONS
 
 var deleteGameButton = document.querySelector('#button3');
 deleteGameButton.addEventListener('click', deleteGameFunction, false);
@@ -216,6 +163,8 @@ function deleteGameFunction(gameDate) {
 // firebase.database().ref('teams/').on('value', function(snapshot) {
 //   console.log(snapshot.val());
 // });
+
+
 
 
 // VIEW 2 -- TEAM PLAYER LIST
@@ -272,13 +221,7 @@ function renderPlayerContainer(state, container) {
 
 
 
-//call functions
 
-renderHeader(state, header);    // render header
-
-// renderGameChoices(state, container);   // render home page buttons
-
-//renderPlayerContainer(state, container);    // render player list container
 
 
 
