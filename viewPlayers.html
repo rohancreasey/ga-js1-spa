@@ -11,6 +11,20 @@
 </head>
 <body>
 
+<!-- Firebase Code -->
+
+<script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBj2uZQdGOraZh-QRmHM07boCxq0uVlXzo",
+    authDomain: "rohancreasey-project1.firebaseapp.com",
+    databaseURL: "https://rohancreasey-project1.firebaseio.com",
+    storageBucket: "",
+  };
+  firebase.initializeApp(config);
+</script>
+
   <header>
     <!-- JS will render the nav bar area -->
   </header>
@@ -19,7 +33,7 @@
     <!-- Your HTML here -->
 
 
-    <ul style="list-style: none outside none;">
+    <!--<ul style="list-style: none outside none;">
       <li>
         <form action="">
           <li style="float: left;display: block;width: 200px;height: 40px;">Player Name</li>
@@ -28,9 +42,42 @@
           <li style="float: left;display: block;width: 50px;height: 60px;"><input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA</li>
         </form>
       </li>
-    </ul>
+    </ul>-->
+
+      <div class="todo-list">
+    List here: <ul></ul> 
+  </div>
+
+
 
 <br/>
+
+
+<script>
+
+// take snapshot of firebase data
+// render it to list
+
+var state = {
+  players : []
+};
+
+firebase.database().ref('players/').on('value', function(snapshot) {
+    state.players = snapshot.val();
+    console.log(state);
+    renderList(state, document.querySelector('ul'))
+});
+
+function renderList(data, into) {
+    var display = '';
+    Object.keys(data.players).forEach((el) => {
+        display += `<li data-id="${el}">${data.players[el].name}</li>`
+    });
+    console.log('done'); 
+    into.innerHTML = display;  
+}
+
+</script>
 
 
     <!--<form action="">
