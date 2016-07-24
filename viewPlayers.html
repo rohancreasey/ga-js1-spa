@@ -44,7 +44,7 @@
       </li>
     </ul>-->
 
-      <div class="todo-list">
+  <div class="todo-list">
     List here: 
 
     <!--<ul class="playerList">
@@ -62,29 +62,29 @@
 
 
 
-<br/>
+  <br/>
 
 
-<script>
+  <script>
 
-// take snapshot of firebase data
-// render it to list
+  // take snapshot of firebase data
+  // render it to list
 
-var state = {
-  players : []
-};
+  var state = {
+    players : []
+  };
 
-firebase.database().ref('players/').on('value', function(snapshot) {
+  firebase.database().ref('players/').on('value', function(snapshot) {
     state.players = snapshot.val();
     console.log(state);
     renderPlayerList(state, document.querySelector('#container'))
-});
+  });
 
-function renderPlayerList(data, into) {
+  function renderPlayerList(data, into) {
     var playerList = '';
     Object.keys(data.players).forEach((element) => {
-//        playerList += `<li data-id="${el}">${data.players[el].name}</li>`
-/*        playerList += `
+    //        playerList += `<li data-id="${el}">${data.players[el].name}</li>`
+    /*        playerList += `
             <ul class="playerList">
               <li>
                 <form action="">
@@ -96,26 +96,18 @@ function renderPlayerList(data, into) {
               </li>
             </ul>
             `
- */
-          playerList += `<ul>
-
-                        <li><span>${data.players[element].name}&nbsp;&nbsp;</span><input type="radio" name="attendance" value="present">&nbsp;P&nbsp;<input type="radio" name="attendance" value="absentExplained">&nbsp;EA&nbsp;<input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA&nbsp;</li>
-                      </ul>`
-   });
+     */
+    playerList += `
+                  <ul>
+                    <li><span>${data.players[element].name}&nbsp;&nbsp;</span><input type="radio" name="attendance" value="present">&nbsp;P&nbsp;<input type="radio" name="attendance" value="absentExplained">&nbsp;EA&nbsp;<input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA&nbsp;</li>
+                  </ul>`
+    });
     console.log('done'); 
     into.innerHTML = playerList;  
-}
+  }
 
-</script>
+  </script>
 
-
-    <!--<form action="">
-      
-      <input type="radio" name="attendance" value="present"> P 
-      <input type="radio" name="attendance" value="absentExplained"> EA 
-      <input type="radio" name="attendance" value="absentUnexplained"> UA
-      Player 1 
-    </form>-->
 
 
 
