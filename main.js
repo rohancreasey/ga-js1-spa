@@ -10,17 +10,18 @@
   var container = document.querySelector('#container')
   var header = document.querySelector('header')
   var state = {
-    games : ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-    groups : ['teamRED','teamBLUE','teamYELLOW'],
-    teams : [
+    players : [],
+    quoteOfDay : [],  
+    
+    // games : ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+    groups : ['teamRED','teamBLUE','teamYELLOW']
+    /* teams : [
         {
           name : 'teamRED',
           coach : 'Coachy McCoach',
           players : ['Han Solo','Luke Skywalker','Chewie Bacca','Lando Calrissian','Leia Organa','Obi-Wan Kenobi','Admiral Ackbar']
         }
-        ],
-    players : [],
-    quoteOfDay : []    
+        ],  */
     }
 
 
@@ -38,21 +39,13 @@ function render(data, into) {
 
 // 1. HEADER CODE
 
-// Drop Down Menu - currently pulling list of groups
-  // change to: 'Home // Teams // Edit Games // ...?
+// DROP DOWN MENU - currently pulling list of groups array 
+// TODO - change menu to pull FB team list
 function renderDropDownItem(item) {
   // return `<a href="#">${item.name}</a>`
   // console.log(item);
   return `<a href="#">${item}</a>`     
 }
-
-// var link = document.querySelector('#drop-down-list');
-// link.addEventListener("click", doSomething, false);
-// // console.log(link);
-// function doSomething(callback){
-//   var teamLink = link;
-//   console.log('teamLink value: ' + teamLink);
-// }
 
 // HEADER 
 function renderHeader(state, header) {
@@ -85,8 +78,8 @@ function renderHeader(state, header) {
 // TEAM SELECTION FUNCTIONS
 
 delegate('#drop-down-list', 'click', 'a', (event) => {
-  var id = event.delegateTarget.innerHTML;
-  console.log(id);
+  var selectedTeam = event.delegateTarget.innerHTML;
+  console.log(selectedTeam);
   renderGameChoices(state, container);
   //firebase.database().ref('tasks/' + id).remove();
   // 
@@ -116,12 +109,12 @@ function renderGameChoices(state, container){
     </div>
   `
 
-
+// MOVED TO DELEGATE FUNCTIONS AT END
 // var createGame = document.querySelector('#button1');
-// createGame.addEventListener("click", createNewGameFunction, false);
+// createGame.addEventListener("click", createNewGameDateFunction, false);
 
 // var deleteGameButton = document.querySelector('#button3');
-// deleteGameButton.addEventListener('click', deleteGameFunction, false);
+// deleteGameButton.addEventListener('click', deleteGameDateFunction, false);
 
 }
 
@@ -130,12 +123,12 @@ function renderGameChoices(state, container){
 
 
 // Create New Game Function
-function createNewGameFunction(gameDate) {
+function createNewGameDateFunction(gameDate) {
   console.log('create-called');
   var dateCreate = document.getElementById('create-gameDate').value;  // get selected date, assign to dateCreate 
   // console.log('Selected date: ' + dateCreate);  // check
   if (dateCreate != '') {
-    var currentGame = firebase.database().ref('games/' + dateCreate).push({ // push new game date
+    var currentGame = firebase.database().ref(dateCreate).push({ // push new game date
       team: 'teamRED',
       
     });
@@ -150,12 +143,12 @@ function createNewGameFunction(gameDate) {
 
 // DELETE GAME ACTIONS
 
-function deleteGameFunction(gameDate) {
+function deleteGameDateFunction(gameDate) {
   console.log('delete-called');
   var dateDelete = document.getElementById('delete-gameDate').value; // get value of delete date
     console.log('Selected date: ' + dateDelete);  // check
     if ((dateDelete != '') && confirm("Are you sure you want to delete this game date?") == true) {
-      firebase.database().ref('games/' +dateDelete).set({
+      firebase.database().ref('games/' + dateDelete).set({
       //dateDelete : {
       
       //}
@@ -170,6 +163,8 @@ function deleteGameFunction(gameDate) {
 
 // VIEW 2 -- TEAM PLAYER LIST
 
+/*
+
 function renderPlayer(item) { // renders Player name
   return (
     `<a href="#">${item}</a>`
@@ -177,9 +172,9 @@ function renderPlayer(item) { // renders Player name
 }
 
 // render Team List
-function renderPlayerContainer(state, container) {
-  container.innerHTML = `
-    <section id="main" class="wrapper">
+function renderPlayerContainer(state, playerContainer) {
+  playerContainer.innerHTML = `
+    <section id="team-details" class="wrapper">
       <div id="team-name">Team List: <strong>Team Name</strong></div>
         <div id"coach-name>Coach: <strong>Coachy McCoach</strong></div>
           <ul>
@@ -191,7 +186,36 @@ function renderPlayerContainer(state, container) {
     `
 }
 
+*/
 
+//  firebase.database().ref('players/').on('value', function(snapshot) {
+//     state.players = snapshot.val();
+//     console.log(state);
+//     renderPlayerList(state, document.querySelector('#container'))
+//   });
+
+  function renderPlayerList(data, into) {
+    var playerList = '';  // make empty playerList var
+    Object.keys(data.players).forEach((element) => {
+    // assign html to playerList
+    playerList += `   
+                  <ul>
+                    <li><span>${data.players[element].name}&nbsp;&nbsp;</span><input type="radio" name="attendance" value="present">&nbsp;P&nbsp;<input type="radio" name="attendance" value="absentExplained">&nbsp;EA&nbsp;<input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA&nbsp;</li>
+                  </ul>`
+    });
+    console.log('playerlist assigned'); 
+    into.innerHTML = `
+                     <section id="team-details" class="wrapper">
+                    <div id="team-name">Team List: <strong>Team Name</strong></div>
+                    <div id"coach-name>Coach: <strong>Coachy McCoach</strong></div>
+                     ${playerList}  
+                    `
+    console.log('playerList called');
+    console.log(currentGame);
+    console.log(currentGame.key);
+    console.log(currentGame);
+
+}
 
 
 
@@ -275,8 +299,20 @@ function fetchQuotes(){
 
 // delegates call functions when/IF element is clicked 
 
-delegate('body', 'click', '#button1', createNewGameFunction)
-delegate('body', 'click', '#button3', deleteGameFunction)
+delegate('body', 'click', '#button1', createNewGameDateFunction)
+// delegate('body', 'click', '#button1', renderPlayerList)
+ 
+ // TODO - on to once
+delegate('body', 'click', '#button1', (players) => {
+  firebase.database().ref('players/').once('value', function(snapshot) {
+    state.players = snapshot.val();
+    console.log(state);
+    renderPlayerList(state, document.querySelector('#playerContainer'))
+  })
+})
+
+
+delegate('body', 'click', '#button3', deleteGameDateFunction)
 
 
 // close main render function
