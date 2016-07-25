@@ -31,45 +31,30 @@ function render(data, into) {
 
   // CALL FUNCTIONS
   renderHeader(state, header);    // render header
-  renderGameChoices(state, container);   // render home page buttons
-  //renderPlayerContainer(state, container);    // render player list container
-  fetchQuotes();
+  // MOVED renderGameChoices(state, container);   // render home page buttons
+  // renderPlayerContainer(state, container);    // render player list container
+  // TEMP fetchQuotes();
+    // SECOND QUOTE fetchQuotesOnDesign();
 
-
-// HEADER CODE
+// 1. HEADER CODE
 
 // Drop Down Menu - currently pulling list of groups
-// change to: 'Home // Teams // Edit Games // ...?
+  // change to: 'Home // Teams // Edit Games // ...?
 function renderDropDownItem(item) {
   // return `<a href="#">${item.name}</a>`
-  console.log(item);
-  return `<span id="${item}"><a href="#">${item}</a></span>`     
+  // console.log(item);
+  return `<a href="#">${item}</a>`     
 }
 
-var link = document.querySelector('#drop-down-list');
-link.addEventListener("click", doSomething, false);
-console.log(link);
-function doSomething(callback){
-  var teamLink = link.li.span.a.value;
-  console.log('teamLink value: ' + teamLink);
-}
-    // // Create New Game Function
-    // function doSomething(callback) {
-    //   var dateCreate = document.getElementById('create-gameDate').value;  // get selected date, assign to dateCreate 
-    //   // console.log('Selected date: ' + dateCreate);  // check
-    //   if (dateCreate != '') {
-    //     firebase.database().ref('games/' + dateCreate).push({ // push new game date
-    //       team: 'teamRED',
-    //     });
-    //   console.log('Date added to database: ' + dateCreate);    // check
-    //   } else {  // check - if no date selected, alert
-    //     alert('Please select a new game date.');
-    //   }
-    // }
+// var link = document.querySelector('#drop-down-list');
+// link.addEventListener("click", doSomething, false);
+// // console.log(link);
+// function doSomething(callback){
+//   var teamLink = link;
+//   console.log('teamLink value: ' + teamLink);
+// }
 
-
-// Header 
-// contains drop down, search bar, title
+// HEADER 
 function renderHeader(state, header) {
   header.innerHTML = `
     <section class="wrapper">
@@ -99,40 +84,13 @@ function renderHeader(state, header) {
 
 // TEAM SELECTION FUNCTIONS
 
-delegate('li', 'click', 'span', (event) => {
-  var id = event.target.id.value;
-  console.log(event.delegateTarget);
+delegate('#drop-down-list', 'click', 'a', (event) => {
+  var id = event.delegateTarget.innerHTML;
+  console.log(id);
+  renderGameChoices(state, container);
   //firebase.database().ref('tasks/' + id).remove();
-  // renderList(state, document.querySelector('ul'));
+  // 
 });
-
-
-
-// var choseTeam = document.querySelector('header');
-// choseTeam.addEventListener("click", choseTeamFunction, false);
-
-// // // Create New Game Function
-// function choseTeamFunction(team) {
-// 	var chosenTeam = document.header.getElementById('#item').value;  // get selected date, assign to dateCreate 
-
-  
-//     // console.log('Selected date: ' + dateCreate);  // check
-
-//     if (dateCreate != '') {
-//         firebase.database().ref('games/' + dateCreate).push({ // push new game date
-//           team: 'teamRED',
-//         });
-//       console.log('Date added to database: ' + dateCreate);    // check
-//     }
-
-//    else {  // check - if no date selected, alert
-//       alert('Please select a new game date.');
-      
-//     }  
-
-// }
-
-
 
 /* Call data */
 // firebase.database().ref('players/').on('value', function(snapshot) {
@@ -157,35 +115,43 @@ function renderGameChoices(state, container){
       <button id="button3" class="gameChoiceButton">Button 3 - Delete game</button><br/>
     </div>
   `
+
+
+// var createGame = document.querySelector('#button1');
+// createGame.addEventListener("click", createNewGameFunction, false);
+
+// var deleteGameButton = document.querySelector('#button3');
+// deleteGameButton.addEventListener('click', deleteGameFunction, false);
+
 }
 
-
 // ADD GAME ACTIONS
+//debugger
 
-var createGame = document.querySelector('#button1');
-createGame.addEventListener("click", createNewGameFunction, false);
 
 // Create New Game Function
 function createNewGameFunction(gameDate) {
+  console.log('create-called');
   var dateCreate = document.getElementById('create-gameDate').value;  // get selected date, assign to dateCreate 
   // console.log('Selected date: ' + dateCreate);  // check
   if (dateCreate != '') {
-    firebase.database().ref('games/' + dateCreate).push({ // push new game date
+    var currentGame = firebase.database().ref('games/' + dateCreate).push({ // push new game date
       team: 'teamRED',
+      
     });
-  console.log('Date added to database: ' + dateCreate);    // check
+    console.log(currentGame.key);
+    console.log('Date added to database: ' + dateCreate);    // check
+    return currentGame.key;
   } else {  // check - if no date selected, alert
     alert('Please select a new game date.');
   }
 }
 
+
 // DELETE GAME ACTIONS
 
-var deleteGameButton = document.querySelector('#button3');
-deleteGameButton.addEventListener('click', deleteGameFunction, false);
-
-// Delete game function
 function deleteGameFunction(gameDate) {
+  console.log('delete-called');
   var dateDelete = document.getElementById('delete-gameDate').value; // get value of delete date
     console.log('Selected date: ' + dateDelete);  // check
     if ((dateDelete != '') && confirm("Are you sure you want to delete this game date?") == true) {
@@ -199,33 +165,6 @@ function deleteGameFunction(gameDate) {
       alert("Did you mean to select a game date to delete?");
     }
 }
-
-// firebase.database().ref('teams/').on('value', function(snapshot) {
-//   console.log(snapshot.val());
-// });
-
-
-
-// FETCH QUOTES (max 10 per hour)
-
-function fetchQuotes(){
-	  fetch('http://quotes.rest/qod.json?category=inspire')
-	    .then(function(response) {
-	      return response.json();
-	    }).then(function(dataAsJson) {
-          console.log(dataAsJson);
-          // loop through data
-          dataAsJson.contents.quotes.forEach((item) => {
-	        var quotesObject = {}
-          quotesObject.author = item.author
-          quotesObject.quote = item.quote
-          //   // push to array
-          state.quoteOfDay.push(quotesObject);
-          console.log(state.quoteOfDay);
-	  })
-      // renderArticleListContainer(state, container)
-	})};
-
 
 
 
@@ -257,6 +196,49 @@ function renderPlayerContainer(state, container) {
 
 
 
+// FETCH QUOTES (max 10 per hour)
+
+function fetchQuotes(){
+	  fetch('http://quotes.rest/qod.json')
+	    .then(function(response) {
+	      return response.json();
+	    }).then(function(dataAsJson) {
+          console.log(dataAsJson);
+          // loop through data
+          dataAsJson.contents.quotes.forEach((item) => {
+	        var quotesObject = {}
+          quotesObject.author = item.author
+          quotesObject.quote = item.quote
+          //   // push to array
+          state.quoteOfDay.push(quotesObject);
+          console.log(state.quoteOfDay);
+	  })
+      // renderArticleListContainer(state, container)
+	})};
+  
+/* second quotes unrequired
+  function fetchQuotesOnDesign(){
+	  fetch('https://crossorigin.me/http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1')
+	    .then(function(response) {
+	      return response.json();
+	    }).then(function(dataAsJson) {
+          console.log(dataAsJson);
+          // loop through data
+          dataAsJson.contents.quotes.forEach((item) => {
+	        var quotesObject = {}
+          quotesObject.author = item.author
+          quotesObject.quote = item.quote
+          //   // push to array
+          state.quoteOfDay.push(quotesObject);
+          console.log(state.quoteOfDay);
+	  })
+      // renderArticleListContainer(state, container)
+	})};
+
+// http://quotes.rest/qod.json
+// http://quotes.rest/qod.json?category=management'
+// https://crossorigin.me/http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1
+*/
 
 
 
@@ -287,6 +269,14 @@ function renderPlayerContainer(state, container) {
 
 
 
+
+
+
+
+// delegates call functions when/IF element is clicked 
+
+delegate('body', 'click', '#button1', createNewGameFunction)
+delegate('body', 'click', '#button3', deleteGameFunction)
 
 
 // close main render function
