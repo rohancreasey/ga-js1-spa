@@ -14,11 +14,13 @@
   var header = document.querySelector('header')
   var state = {
     players : [],
-    quoteOfDay : [],  
+    quoteOfDay : {},
+    quoteOfDayArray : [],  
     groups : ['teamA','teamB','teamC'],
     teams: [],
     selectedTeam : [],
-    currentGameID : []
+    currentGameID : [],
+    attendanceRecords : {}
     }
 
 
@@ -108,11 +110,7 @@ function renderGameChoices(state, choiceButtonsContainer){
             <input type="date" id="delete-gameDate" />
             <button id="button3" class="gameChoiceButton">Delete a Game Record</button><br/>
           </div>
-        </div> 
-
-    <div class="showQuotes">
-      <button id="submitAttendanceButton" class="showQuotesButton" style="margin-top:40px;">Show Quotes</button><br/>
-    </div>
+        </div>
       `
 }
 
@@ -242,8 +240,8 @@ function renderPlayerContainer(state, playerContainer) {
     // assign html to playerList
     playerList += `   
                   <form action="">
-                  <ul id="playerAttendanceList">
-                    <li><span>${data.players[element].name}&nbsp;&nbsp;</span><input type="radio" name="attendance-P" value="present">&nbsp;P&nbsp;<input type="radio" name="attendance-EA" value="absentExplained">&nbsp;EA&nbsp;<input type="radio" name="attendance-UA" value="absentUnexplained">&nbsp;UA&nbsp;</li>
+                  <ul class="playerAttendanceList" data-name="${data.players[element].name}">
+                    <li><span>${data.players[element].name}&nbsp;&nbsp;</span><input type="radio" name="attendance" value="present">&nbsp;P&nbsp;<input type="radio" name="attendance" value="absentExplained">&nbsp;EA&nbsp;<input type="radio" name="attendance" value="absentUnexplained">&nbsp;UA&nbsp;</li>
                   </ul>
                   </form>
                   `
@@ -252,10 +250,10 @@ function renderPlayerContainer(state, playerContainer) {
     into.innerHTML = `
                      ${playerList}
                      
-                     <div>
-                     
+                     <div class="showQuotes">
+                       <button id="submitAttendanceButton" class="showQuotesButton" style="margin-top:40px;">Show Quotes</button><br/>
                      </div>
-                    `
+                     `
     console.log('playerAttendance called');
     // console.log(playerList);
 }
@@ -265,8 +263,8 @@ function renderQuoteContainer(data, container) {
   container.innerHTML = `
     <p><em>Thanks for the roster. Enjoy the game!</em></p>
     <p style=""><em>Thanks for the roster. Enjoy the game!</em></p>
-    <p style="font-weight:bold;margin-top:60px;">${state.quoteOfDay.author}</p>
-    <p>- ${state.quoteOfDay.quotesObject.author}</p>
+    <p style="font-weight:bold;margin-top:60px;">${state.quoteOfDay.quote}</p>
+    <p>- ${state.quoteOfDay.author}</p>
   `
 }
 
@@ -317,18 +315,33 @@ function fetchQuotes(){
 	      return response.json();
 	    }).then(function(dataAsJson) {
           console.log(dataAsJson);
-          // loop through data
-          dataAsJson.contents.quotes.forEach((item) => {
-	        var quotesObject = {}
-          quotesObject.author = item.author
-          quotesObject.quote = item.quote
-          //   // push to array
-          state.quoteOfDay.push(quotesObject);
-          console.log(state.quoteOfDay);
-          console.log('THis is state.quoteOfDay: ' + state.quoteOfDay);
+          state.quoteOfDay.author = dataAsJson.contents.quotes[0].author
+          state.quoteOfDay.quote = dataAsJson.contents.quotes[0].quote
+          console.log('this is state.quoteOfDay.author: ' + state.quoteOfDay.author);
+          console.log('this is state.quoteOfDay.quote: ' + state.quoteOfDay.quote);
 	  })
       renderQuoteContainer(state, container)
-	})};
+	};
+
+
+// function fetchQuotes(){
+// 	  fetch('http://quotes.rest/qod.json')
+// 	    .then(function(response) {
+// 	      return response.json();
+// 	    }).then(function(dataAsJson) {
+//           console.log(dataAsJson);
+//           // loop through data
+//           dataAsJson.contents.quotes.forEach((item) => {
+// 	        var quotesObject = {}
+//           quotesObject.author = item.author
+//           quotesObject.quote = item.quote
+//           //   // push to array
+//           state.quoteOfDay.push(quotesObject);
+//           console.log(state.quoteOfDay);
+//           console.log('THis is state.quoteOfDay: ' + state.quoteOfDay);
+// 	  })
+//       renderQuoteContainer(state, container)
+// 	})};
   
 /* second quotes unrequired
   function fetchQuotesOnDesign(){
@@ -426,7 +439,10 @@ delegate('#drop-down-list', 'click', 'a', (players) => {
 // on create button click, create new game entry
 delegate('body', 'click', '#button1', createNewGameDateFunction)
 
-delegate('body', 'click', '#button1', renderPlayerAttendance)
+// NOTE - function expecting two params, was just receiving event. Need to call as funtion within delegate* Every delegate receives a param, which is the event. Call it that.
+delegate('body', 'click', '#button1', (event) => {
+ renderPlayerAttendance(state, playerContainer)
+})
  
 //  OLD - render Player List on button press
 // delegate('body', 'click', '#button1', (players) => {
@@ -440,7 +456,49 @@ delegate('body', 'click', '#button1', renderPlayerAttendance)
 // on delete button click, delete function
 delegate('body', 'click', '#button3', deleteGameDateFunction)
 
-delegate('body', 'click', '#submitAttendanceButton', fetchQuotes)
+
+delegate('#container', 'click', '.playerAttendanceList > input', (event) => {
+  // need player name & value selected
+  var valueSelected = event.delegateTarget.value // TODO event.. .is event delgate Target... 
+  var playerName = closest(event.delegateTarget, '[data-name]').getAttribute('data-name')
+  
+  state.attendanceRecords.player = playerName
+  state.attendanceRecords.attendanceValue = valueSelected
+
+  console.log(state.attendanceRecords);
+
+  // push to state
+  // after button clicked to save
+  // read back from state to get current state for each player  & push to FB
+
+});
+
+//           dataAsJson.contents.quotes.forEach((item) => {
+// 	        var quotesObject = {}
+//           quotesObject.author = item.author
+//           quotesObject.quote = item.quote
+//           //   // push to array
+//           state.quoteOfDay.push(quotesObject);
+//           console.log(state.quoteOfDay);
+//           console.log('THis is state.quoteOfDay: ' + state.quoteOfDay);
+
+
+// delegate('#container', 'click', '____', (event) => {
+//   var selectedRadio = document.querySelector('radio')
+
+  
+
+//   console.log(': ' + selectedTeam);
+
+
+// }
+
+
+delegate('body', 'click', '#submitAttendanceButton', (event) => {
+  fetchQuotes()
+  // stack overflow TODO
+  //document.querySelector('input[name="attendance"]:checked').value; // collects first radio box set
+})
 
 
 
