@@ -29,24 +29,14 @@ html {
 
 /* Player List styles */
 #playerContainer {
+
+}
+
+#choiceButtonsContainer {
   padding-top:20px;
   float: left;
   clear: left;
 }
-
-.playerList {
-}
-
-.playerList li {
-}
-
-.playerListplayerName {
-float: left;
-display: block;
-width: 200px;
-height: 40px;
-}
-
 
 /* Page layout */
 html {
@@ -208,3 +198,14 @@ nav ul ul li {
 
 
 
+#table {
+    display: table;
+    }
+
+  #row  {
+    display: table-row;
+    }
+
+  #left, #right, #middle {
+    display: table-cell;
+    }
