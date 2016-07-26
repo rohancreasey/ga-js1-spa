@@ -17,7 +17,9 @@
     quoteOfDay : [],  
     groups : ['teamRED','teamBLUE','teamYELLOW'],
     selectedTeam : [],
-    currentGame : []
+    currentGameID : [
+
+    ]
     }
 
 
@@ -138,16 +140,17 @@ function createNewGameDateFunction(gameDate) {
   var dateCreate = document.getElementById('create-gameDate').value;  // get selected date, assign to dateCreate 
   // console.log('Selected date: ' + dateCreate);  // check  
   if (dateCreate != '') {
-    var currentGame = firebase.database().ref(dateCreate).push({ // push new game date
+
+    var newGame = firebase.database().ref('gameRecords/' + dateCreate + '/' + state.selectedTeam).set({ // set new game date
       team: state.selectedTeam,
-      
+      players: state.players
     });
-    state.currentGame = currentGame;
-    console.log('state.currentGame: ' + currentGame);
-    console.log('currentGame.key: ' + currentGame.key);
+    state.currentGameID = newGame.key;
+    console.log('state.currentGameID: ' + state.currentGameID);
+    // console.log('currentGameID.key: ' + currentGameID.key);
     console.log('Date added to database: ' + dateCreate);
     // console.log('selectedTeam var = ' + selectedTeam)    // check
-    //return currentGame.key;
+    //return currentGameID.key;
   } else {          // check - if no date selected, alert
     alert('Please select a new game date.');
   }
@@ -162,15 +165,12 @@ function deleteGameDateFunction(gameDate) {
   var dateDelete = document.getElementById('delete-gameDate').value; // get value of delete date
     console.log('Selected date: ' + dateDelete);  // check
     if ((dateDelete != '') && confirm("Are you sure you want to delete this game date?") == true) {
-      // delete: selected date/uniqueID/teamName
-      firebase.database().ref('games/' + dateDelete +'/currentGame.key').set({
-      //dateDelete : {
-      
-      //}
-      });
-      console.log('Game date deleted from database: ' + dateDelete);    // check
+      if (confirm("REALLY?") == true) {
+        firebase.database().ref('gameRecords/' + dateDelete + '/' + state.selectedTeam).remove();
+        console.log('Game data deleted from database: ' + dateDelete + state.selectedTeam);
+      }
     } else if (dateDelete == '') {
-      alert("Did you mean to select a game date to delete?");
+        alert("Did you mean to select a game date to delete?");
     }
 }
 

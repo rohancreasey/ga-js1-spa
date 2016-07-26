@@ -10,7 +10,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-
+  <!-- Firebase Code -->
+  <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+      var config = {
+      apiKey: "AIzaSyBj2uZQdGOraZh-QRmHM07boCxq0uVlXzo",
+      authDomain: "rohancreasey-project1.firebaseapp.com",
+      databaseURL: "https://rohancreasey-project1.firebaseio.com",
+      storageBucket: "",
+    };
+    firebase.initializeApp(config);
+  </script>
+  
   <header>
     <!-- JS will render the nav bar here -->
   </header>
@@ -61,23 +73,16 @@
           </div>
     -->
   </div>
-
-
+<script>
+firebase.database().ref('gameRecords/').on('value', function(snapshot) {
+    gameRecordsObj = snapshot.val();
+     console.log(gameRecordsObj);
+   });
+</script>
 </div>
 
 
-  <!-- Firebase Code -->
-  <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
-  <script>
-    // Initialize Firebase
-      var config = {
-      apiKey: "AIzaSyBj2uZQdGOraZh-QRmHM07boCxq0uVlXzo",
-      authDomain: "rohancreasey-project1.firebaseapp.com",
-      databaseURL: "https://rohancreasey-project1.firebaseio.com",
-      storageBucket: "",
-    };
-    firebase.initializeApp(config);
-  </script>
+
 
   <!-- DOM Utility functions -->
   <script src="https://rawgit.com/jesstelford/a981e6877034231bd43b526a07b3a7b4/raw/js1-utilities.js"></script>
