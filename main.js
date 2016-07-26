@@ -83,7 +83,7 @@ function renderHeader(state, header) {
 function renderTeamDetails(state, teamDetailsContainer){
   teamDetailsContainer.innerHTML = 
     `
-                    <div id="team-name">Team List: <strong>Team Name</strong></div>
+                    <div id="team-name">Team List: <span class="team-name">${state.selectedTeam}</span></div>
                     <div id"coach-name>Coach: <strong>Coachy McCoach</strong></div>
     `
 }
@@ -373,7 +373,7 @@ function fetchQuotes(){
 
 
 
-// delegates call functions when/IF element is clicked 
+// delegates 
 
 // on drop down team selection, render Team Details
 delegate('#drop-down-list', 'click', 'a', (event) => {

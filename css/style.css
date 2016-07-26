@@ -196,16 +196,8 @@ nav ul ul li {
 
 
 
-
-
-#table {
-    display: table;
-    }
-
-  #row  {
-    display: table-row;
-    }
-
-  #left, #right, #middle {
-    display: table-cell;
-    }
+.team-name {
+  color: red;
+  font-weight: bold;
+  margin-left: 10px;
+}
