@@ -7,32 +7,30 @@
 
 (function() {
 
-  var container = document.querySelector('#container')
+  var container = document.querySelector('#choiceButtonsContainer')
   var header = document.querySelector('header')
   var state = {
     players : [],
     quoteOfDay : [],  
-    
-    // games : ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
     groups : ['teamRED','teamBLUE','teamYELLOW']
-    /* teams : [
-        {
-          name : 'teamRED',
-          coach : 'Coachy McCoach',
-          players : ['Han Solo','Luke Skywalker','Chewie Bacca','Lando Calrissian','Leia Organa','Obi-Wan Kenobi','Admiral Ackbar']
-        }
-        ],  */
+      /* teams : [
+          {
+            name : 'teamRED',
+            coach : 'Coachy McCoach',
+            players : ['Han Solo','Luke Skywalker','Chewie Bacca','Lando Calrissian','Leia Organa','Obi-Wan Kenobi','Admiral Ackbar']
+          }
+          ],  */
     }
 
 
-render(state, container)
+render(state, choiceButtonsContainer)
 
 function render(data, into) {
   // TODO
 
   // CALL FUNCTIONS
   renderHeader(state, header);    // render header
-  // MOVED renderGameChoices(state, container);   // render home page buttons
+  // MOVED renderGameChoices(state, choiceButtonsContainer);   // render home page buttons
   // renderPlayerContainer(state, container);    // render player list container
   // TEMP fetchQuotes();
     // SECOND QUOTE fetchQuotesOnDesign();
@@ -80,7 +78,8 @@ function renderHeader(state, header) {
 delegate('#drop-down-list', 'click', 'a', (event) => {
   var selectedTeam = event.delegateTarget.innerHTML;
   console.log(selectedTeam);
-  renderGameChoices(state, container);
+  renderTeamDetails(state, teamDetailsContainer);
+  renderGameChoices(state, choiceButtonsContainer);
   //firebase.database().ref('tasks/' + id).remove();
   // 
 });
@@ -90,11 +89,21 @@ delegate('#drop-down-list', 'click', 'a', (event) => {
 //   console.log(snapshot.val());
 // });
 
+// VIEW 1a -- TEAM DETAILS
 
-// VIEW 1 -- DEFAULT VIEW -- BUTTON CHOICE
+function renderTeamDetails(state, teamDetailsContainer){
+  teamDetailsContainer.innerHTML = 
+    `
+                    <div id="team-name">Team List: <strong>Team Name</strong></div>
+                    <div id"coach-name>Coach: <strong>Coachy McCoach</strong></div>
+    `
+}
 
-function renderGameChoices(state, container){
-  container.innerHTML = `
+
+// VIEW 1b -- BUTTON CHOICE
+
+function renderGameChoices(state, choiceButtonsContainer){
+  choiceButtonsContainer.innerHTML = `
     <div class="gameChoicesDiv">
       <input type="date" id="create-gameDate" />
       <button id="button1" class="gameChoiceButton">Button 1 - Create game</button><br/>
@@ -126,18 +135,19 @@ function renderGameChoices(state, container){
 function createNewGameDateFunction(gameDate) {
   console.log('create-called');
   var dateCreate = document.getElementById('create-gameDate').value;  // get selected date, assign to dateCreate 
-  // console.log('Selected date: ' + dateCreate);  // check
+  // console.log('Selected date: ' + dateCreate);  // check  
   if (dateCreate != '') {
     var currentGame = firebase.database().ref(dateCreate).push({ // push new game date
       team: 'teamRED',
       
     });
-    console.log(currentGame.key);
+    console.log('Current game: ' + currentGame.key);
     console.log('Date added to database: ' + dateCreate);    // check
     return currentGame.key;
   } else {  // check - if no date selected, alert
     alert('Please select a new game date.');
   }
+
 }
 
 
@@ -205,9 +215,6 @@ function renderPlayerContainer(state, playerContainer) {
     });
     console.log('playerlist assigned'); 
     into.innerHTML = `
-                     <section id="team-details" class="wrapper">
-                    <div id="team-name">Team List: <strong>Team Name</strong></div>
-                    <div id"coach-name>Coach: <strong>Coachy McCoach</strong></div>
                      ${playerList}  
                     `
     console.log('playerList called');

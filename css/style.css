@@ -6,10 +6,19 @@ html {
   box-sizing: inherit;
 }
 
-// --- Your styles here ---
+/* --- Your styles here --- */
 
-/* VIEW 1 - Game Choices */
+/* VIEW 1a - Team Details */
+
+#teamDetailsContainer {
+  margin-top: 65px;
+  padding: 50px auto;
+}
+
+
+/* VIEW 1b - Game Choices */
 .gameChoicesDiv {
+  margin: 10px 0 0 0;
   float: left;
   clear: left;
 }
@@ -19,6 +28,12 @@ html {
 }
 
 /* Player List styles */
+#playerContainer {
+  padding-top:20px;
+  float: left;
+  clear: left;
+}
+
 .playerList {
 }
 
@@ -55,10 +70,13 @@ body {
 
 
 
+
+
 /* Header styles */
 /* ADJUSTED 
 background-color
 added border
+added margin-bottom
 */
 header {
   background-color: #220099;  
@@ -67,6 +85,7 @@ header {
   left: 0;
   right: 0;
   border-top: 5px solid red;
+  margin-bottom:80px;
 }
 
 /* ADJUSTED 
@@ -178,9 +197,7 @@ nav ul ul li {
 }
 
 /* Main Section */
-#main {
-  margin-top: 65px;
-}
+
 
 
 
