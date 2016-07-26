@@ -12,7 +12,6 @@ html {
 
 #teamDetailsContainer {
   margin-top: 65px;
-  padding: 50px auto;
 }
 
 
@@ -27,36 +26,13 @@ html {
   margin: 0 0 0 10px;
 }
 
-/* Player List styles */
-#playerContainer {
-
-}
-
 #choiceButtonsContainer {
-  padding-top:20px;
+  padding:20px 0;
   float: left;
   clear: left;
 }
+ 
 
-/* Page layout */
-html {
-  height: 100%;
-  max-width: 1024px;
-  margin: 0 auto;
-  background-color: ghostwhite;
-}
-body {
-  min-height: 100%;
-  background-color: white;
-  padding: 1em;
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-}
-
-/* General styles */
-.wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
-}
 
 
 
@@ -200,4 +176,26 @@ nav ul ul li {
   color: red;
   font-weight: bold;
   margin-left: 10px;
+}
+
+
+
+/* Page layout */
+html {
+  height: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: ghostwhite;
+}
+body {
+  min-height: 100%;
+  background-color: white;
+  padding: 1em;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+}
+
+/* General styles */
+.wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
 }

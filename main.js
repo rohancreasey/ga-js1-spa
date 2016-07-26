@@ -22,7 +22,7 @@
     }
 
 
-render(state, choiceButtonsContainer)
+render(state, container)
 
 function render(data, into) {
   // TODO
@@ -109,6 +109,10 @@ function renderGameChoices(state, choiceButtonsContainer){
             <button id="button3" class="gameChoiceButton">Delete a Game Record</button><br/>
           </div>
         </div> 
+
+    <div class="showQuotes">
+      <button id="submitAttendanceButton" class="showQuotesButton" style="margin-top:40px;">Show Quotes</button><br/>
+    </div>
       `
 }
 
@@ -256,6 +260,17 @@ function renderPlayerContainer(state, playerContainer) {
     // console.log(playerList);
 }
 
+
+function renderQuoteContainer(data, container) {
+  container.innerHTML = `
+    <p><em>Thanks for the roster. Enjoy the game!</em></p>
+    <p style=""><em>Thanks for the roster. Enjoy the game!</em></p>
+    <p style="font-weight:bold;margin-top:60px;">${state.quoteOfDay.author}</p>
+    <p>- ${state.quoteOfDay.quotesObject.author}</p>
+  `
+}
+
+
 /*
 var attendance = [];
 
@@ -294,7 +309,6 @@ function submitAttendance(){
 
 */
 
-
 // FETCH QUOTES (max 10 per hour)
 
 function fetchQuotes(){
@@ -311,8 +325,9 @@ function fetchQuotes(){
           //   // push to array
           state.quoteOfDay.push(quotesObject);
           console.log(state.quoteOfDay);
+          console.log('THis is state.quoteOfDay: ' + state.quoteOfDay);
 	  })
-      // renderArticleListContainer(state, container)
+      renderQuoteContainer(state, container)
 	})};
   
 /* second quotes unrequired
@@ -357,22 +372,27 @@ function fetchQuotes(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // delegates 
+
+// function load() {
+//         console.log("load event detected!");
+//       }
+//       window.onload = load;
+// window.onload = function(){
+//   var headerLoaded = document.querySelector('header');
+//   headerLoaded.onload = firebase.database().ref('teams/').once('value', function(snapshot) {
+//   state.teams = snapshot.val();
+//   console.log(state.teams);
+// })
+// };
+
+// delegate('#header', 'onload', (teams) => {
+//   firebase.database().ref('teams/').once('value', function(snapshot) {
+//     state.teams = snapshot.val();
+//       console.log(state.teams);
+//   })
+// })
+
 
 // on drop down team selection, render Team Details
 delegate('#drop-down-list', 'click', 'a', (event) => {
@@ -390,14 +410,15 @@ delegate('#drop-down-list', 'click', 'a', (players) => {
   firebase.database().ref('players/').once('value', function(snapshot) {
     state.players = snapshot.val();
     console.log(state.players);
-  firebase.database().ref('teams/').once('value', function(snapshot) {
-    state.teams = snapshot.val();
-      console.log(state.teams);
-    renderPlayerListOnly(state, document.querySelector('#playerContainer'))
+  firebase.database().ref('coaches/').once('value', function(snapshot) {
+    state.coaches = snapshot.val();
+    console.log(state.coaches);
+    
+    renderPlayerListOnly(state, playerContainer)
     renderGameChoices(state, choiceButtonsContainer);
 
   })
-})
+  })
 
 })
 
@@ -418,6 +439,13 @@ delegate('body', 'click', '#button1', renderPlayerAttendance)
 
 // on delete button click, delete function
 delegate('body', 'click', '#button3', deleteGameDateFunction)
+
+delegate('body', 'click', '#submitAttendanceButton', fetchQuotes)
+
+
+
+
+
 
 
 // close main render function

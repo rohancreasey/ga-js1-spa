@@ -22,7 +22,7 @@
     };
     firebase.initializeApp(config);
   </script>
-  
+
   <header>
     <!-- JS will render the nav bar here -->
   </header>
@@ -73,12 +73,44 @@
           </div>
     -->
   </div>
-<script>
-firebase.database().ref('gameRecords/').on('value', function(snapshot) {
-    gameRecordsObj = snapshot.val();
-     console.log(gameRecordsObj);
-   });
-</script>
+
+    <!--
+<div>
+  <p style=""><em>Thanks for the roster. Enjoy the game!</em></p>
+
+
+  <p style="font-weight:bold;margin-top:60px;">Go well.</p>
+  <p>- Rohan Creasey</p>
+
+
+  </div>   
+   -->
+    <!--
+
+            <div id="quoteDiv" style="">
+            
+              <button id="showquote-button" class="">Show Quote</button>
+
+              <script>
+                
+                var theParentIsTheDivId = document.querySelector('#quoteDiv');
+                theParentIsTheDivId.addEventListener('click', doSomething, false);
+            
+                function doSomething(theParentIsTheDivId, into) {
+                  var clickedButton = theParentIsTheDivId.target.id;
+                  //console.log('Button clicked: ' + clickedButton);
+                  clickedButton.innerHTML = `
+                     <div>
+                     MOO
+                     </div>
+                    `
+              }
+              </script>
+            </div>
+    -->
+
+
+
 </div>
 
 
