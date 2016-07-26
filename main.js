@@ -15,11 +15,10 @@
   var state = {
     players : [],
     quoteOfDay : [],  
-    groups : ['teamRED','teamBLUE','teamYELLOW'],
+    groups : ['teamA','teamB','teamC'],
+    teams: [],
     selectedTeam : [],
-    currentGameID : [
-
-    ]
+    currentGameID : []
     }
 
 
@@ -390,12 +389,18 @@ delegate('#drop-down-list', 'click', 'a', (event) => {
 delegate('#drop-down-list', 'click', 'a', (players) => {
   firebase.database().ref('players/').once('value', function(snapshot) {
     state.players = snapshot.val();
-    // console.log(state);
+    console.log(state.players);
+  firebase.database().ref('teams/').once('value', function(snapshot) {
+    state.teams = snapshot.val();
+      console.log(state.teams);
     renderPlayerListOnly(state, document.querySelector('#playerContainer'))
     renderGameChoices(state, choiceButtonsContainer);
 
   })
 })
+
+})
+
 
 // on create button click, create new game entry
 delegate('body', 'click', '#button1', createNewGameDateFunction)
