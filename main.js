@@ -251,6 +251,10 @@ delegate('body', 'click', '#submitAttendanceButton', (event) => {
   var attendanceRecords = firebase.database().ref('gameRecords/' + state.selectedDate + '/' + state.selectedTeam).update({
     players : state.attendanceRecords
   });
+  console.log('CHECK THIS');
+  console.log(state.selectedDate);
+  console.log(state.selectedTeam);
+  console.log(state.attendanceRecords);
 renderQuoteContainer(state, container)
 fetchQuotes()
 })
