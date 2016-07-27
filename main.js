@@ -50,7 +50,7 @@ function renderHeader(state, header) {
   header.innerHTML = `
     <section class="wrapper">
       <div id="title"  style="float:right;">
-        <a href="#"><h1>Roster Application</h1></a>
+        <a href="#"><h1>Team Roster App</h1></a>
       </div>
       <nav>
         <ul>
@@ -122,7 +122,7 @@ function deleteGameDateFunction(gameDate) {
   console.log('delete-called');
   var dateDelete = document.getElementById('delete-gameDate').value; // get value of delete date
     console.log('Selected date: ' + dateDelete);  // check
-    if ((dateDelete != '') && confirm("Are you sure you want to delete this game date?") == true) {
+    if ((dateDelete != '') && confirm("Are you sure you want to delete this record for " + state.selectedTeam + " on " + dateDelete + "?") == true) {
       if (confirm("REALLY?") == true) {
         firebase.database().ref('gameRecords/' + dateDelete + '/' + state.selectedTeam).remove();
         console.log('Game data deleted from database: ' + dateDelete + state.selectedTeam);
