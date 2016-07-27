@@ -13,7 +13,7 @@ Simple app to organise players into team lists, allow each coach to complete a s
 
 ### Evolution
 - Lists allow for updates throughout season (e.g. player moves to another team)
-- List to include medial alerts
+- List to include medical alerts
 - Email notifications to coaches
 - Trigger alert to coordinator upon unexplained absences
 - Export lists & entries to Word/Excel
@@ -36,7 +36,6 @@ This pulls some summary team info and renders the player list for that team.
 It also presents some options:
 - *Create a new game date* allows you to set up a new roster date. Selecting a date and clicking, will render an attendance form for the team. Radio buttons are used to log attendeed (P for present), explained absences (EA) and unexplained absence. The attendance roster can then be submitted (see below).
 - *View games* is currently non-functioning but will be used to list the game list records for a selected team .
-- *Delete a game date* allows a user to remove a selected date record from the system. It will check, and double check that you mean to do it before allowing you!
+- *Delete a game date* allows a user to remove a selected date record from the system. It will check, and double check that you mean to do it before allowing you to do so...
 
 Once an attendance roster is filled out, using the 'Submit Attendance Record' button will submit the roster to Firebase, thank you for your submission, and leave you with a motivational speech to take to your team!
--
