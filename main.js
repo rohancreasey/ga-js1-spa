@@ -13,12 +13,14 @@
   var choiceButtonsContainer = document.querySelector('#choiceButtonsContainer')
   var header = document.querySelector('header')
   var state = {
-    players : [],
+    players : {},
     quoteOfDay : {},
     quoteOfDayArray : [],  
     groups : ['teamA','teamB','teamC'],
     teams: [],
     selectedTeam : [],
+    selectedCoach : [],
+    selectedDate: {},
     currentGameID : [],
     attendanceRecords : {}
     }
@@ -33,26 +35,19 @@ function render(data, into) {
     state.teams = snapshot.val();
     console.log('Teams LOADED');
     console.log(state.teams);
-    // renderPlayerList(state, document.querySelector('#container'))
+    console.log(state.teams.teamRED.coach);
   });
 
-  // firebase.database().ref('coaches/').once('value', function(snapshot) {
-  //   state.coaches = snapshot.val();
+
 
   // CALL FUNCTIONS
   renderHeader(state, header);    // render header
-  // MOVED renderGameChoices(state, choiceButtonsContainer);   // render home page buttons
-  // renderPlayerContainer(state, container);    // render player list container
-  // TEMP fetchQuotes();
-    // SECOND QUOTE fetchQuotesOnDesign();
+
 
 // 1. HEADER CODE
 
-// DROP DOWN MENU - currently pulling list of groups array 
-// TODO - change menu to pull FB team list
+// DROP DOWN MENU 
 function renderDropDownItem(item) {
-  // return `<a href="#">${item.name}</a>`
-  // console.log(item);
   return `<a href="#">${item}</a>`     
 }
 
@@ -85,8 +80,6 @@ function renderHeader(state, header) {
 }
 
 // TEAM SELECTION FUNCTIONS
-
-
 
 
 // VIEW 1a -- TEAM DETAILS
@@ -124,22 +117,7 @@ function renderGameChoices(state, choiceButtonsContainer){
       `
 }
 
-/* VIEW / DELETE BUTTONS:
-    <div class="gameChoicesDiv">
-      <span style="">Roster new Game Date:&nbsp; </span>
-      <input type="date" id="create-gameDate" />
-      <button id="button1" class="gameChoiceButton">Select a new game date</button><br/>
-    </div>
-    <div class="gameChoicesDiv">
-      <input type="date" id="view-gameDate" />
-      <button id="button2" class="gameChoiceButton">Button 2 - View game</button><br/>
-    </div>
-    <div class="gameChoicesDiv">
-      <input type="date" id="delete-gameDate" />
-      <button id="button3" class="gameChoiceButton">Button 3 - Delete game</button><br/>
-    </div>
 
-    */
 
 // ADD GAME ACTIONS
 //debugger
@@ -149,6 +127,7 @@ function renderGameChoices(state, choiceButtonsContainer){
 function createNewGameDateFunction(gameDate) {
   console.log('create-called');
   var dateCreate = document.getElementById('create-gameDate').value;  // get selected date, assign to dateCreate 
+  state.selectedDate = dateCreate;
   // console.log('Selected date: ' + dateCreate);  // check  
   if (dateCreate != '') {
 
@@ -188,37 +167,6 @@ function deleteGameDateFunction(gameDate) {
 
 
 // VIEW 2 -- TEAM PLAYER LIST
-
-/*
-
-function renderPlayer(item) { // renders Player name
-  return (
-    `<a href="#">${item}</a>`
-  )
-}
-
-// render Team List
-function renderPlayerContainer(state, playerContainer) {
-  playerContainer.innerHTML = `
-    <section id="team-details" class="wrapper">
-      <div id="team-name">Team List: <strong>Team Name</strong></div>
-        <div id"coach-name>Coach: <strong>Coachy McCoach</strong></div>
-          <ul>
-            ${state.players.map((item) => {
-              return `<li>${renderPlayer(item)}</li>`
-            }).join('')}
-          </ul>
-    </section>
-    `
-}
-
-*/
-
-//  firebase.database().ref('players/').on('value', function(snapshot) {
-//     state.players = snapshot.val();
-//     console.log(state);
-//     renderPlayerList(state, document.querySelector('#container'))
-//   });
 
   function renderPlayerListOnly(data, into) {
     var playerList = '';  // make empty playerList var
@@ -271,51 +219,15 @@ function renderPlayerContainer(state, playerContainer) {
 
 function renderQuoteContainer(data, container) {
   container.innerHTML = `
-    <p><em>Thanks for the roster. Enjoy the game!</em></p>
-    <p style=""><em>Thanks for the roster. Enjoy the game!</em></p>
-    <p style="font-weight:bold;margin-top:60px;">${state.quoteOfDay.quote}</p>
+    <p style="margin-top:80px;"><em>Thanks for submitting the roster. Enjoy the game!</em></p>
+    <p style="font-weight:bold;margin-top:60px;">"${state.quoteOfDay.quote}"</p>
     <p>- ${state.quoteOfDay.author}</p>
   `
 }
 
 
-/*
-var attendance = [];
 
-function submit() {
 
-  var attendanceRecord = {};
-
-  forEach(item) => {
-  attendanceRecord.playerName = 
-  attendanceRecord.status = 
-  
-  attendanceRecord.push(attendanceRecord);
-  console.log(attendance);
-
-  }
-
-function submitAttendance(){
-	  fetch('http://quotes.rest/qod.json')
-	    .then(function(response) {
-	      return response.json();
-	    }).then(function(dataAsJson) {
-          console.log(dataAsJson);
-          // loop through data
-          
-          
-          dataAsJson.contents.quotes.forEach((item) => {
-	        var quotesObject = {}
-          quotesObject.author = item.author
-          quotesObject.quote = item.quote
-          //   // push to array
-          state.quoteOfDay.push(quotesObject);
-          console.log(state.quoteOfDay);
-	  })
-      // renderArticleListContainer(state, container)
-	})};
-
-*/
 
 // FETCH QUOTES (max 10 per hour)
 
@@ -329,9 +241,9 @@ function fetchQuotes(){
           state.quoteOfDay.quote = dataAsJson.contents.quotes[0].quote
           console.log('this is state.quoteOfDay.author: ' + state.quoteOfDay.author);
           console.log('this is state.quoteOfDay.quote: ' + state.quoteOfDay.quote);
-	  })
-      renderQuoteContainer(state, container)
-	};
+	  renderQuoteContainer(state, container)
+      })
+};
 
 
 // function fetchQuotes(){
@@ -377,31 +289,6 @@ function fetchQuotes(){
 // https://crossorigin.me/http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1
 */
 
-function loopAttendance(){
-  
-  state.attendanceRecords.forEach((item) => {
-
-    
-	        var attendanceObject = {}
-          attendanceObject.player = item.player
-          attendanceObject.attendance = item.attendanceValue
-          //   // push to array
-          state.attendanceRecords.push(attendanceObject);
-          console.log('pushed records');
-	  })
-      //renderQuoteContainer(state, container)
-	};
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -410,36 +297,17 @@ function loopAttendance(){
 
 // delegates 
 
-// function load() {
-//         console.log("load event detected!");
-//       }
-//       window.onload = load;
-// window.onload = function(){
-//   var headerLoaded = document.querySelector('header');
-//   headerLoaded.onload = firebase.database().ref('teams/').once('value', function(snapshot) {
-//   state.teams = snapshot.val();
-//   console.log(state.teams);
-// })
-// };
-
-// delegate('#header', 'onload', (teams) => {
-//   firebase.database().ref('teams/').once('value', function(snapshot) {
-//     state.teams = snapshot.val();
-//       console.log(state.teams);
-//   })
-// })
-
-
 // on drop down team selection, render Team Details
 delegate('#drop-down-list', 'click', 'a', (event) => {
   var selectedTeam = event.delegateTarget.innerHTML;
   state.selectedTeam = selectedTeam;
-
+  //get coaches
   console.log('This is the var selectedTeam: ' + selectedTeam);
   console.log('This is the array state.selectedTeam: ' + state.selectedTeam);
   
   renderTeamDetails(state, teamDetailsContainer);
 });
+
 
 // on drop down team selection, render Player List and button choices
 delegate('#drop-down-list', 'click', 'a', (players) => {
@@ -467,10 +335,8 @@ delegate('body', 'click', '#button1', (event) => {
  renderPlayerAttendance(state, playerContainer)
 })
  
-
 // on delete button click, delete function
 delegate('body', 'click', '#button3', deleteGameDateFunction)
-
 
 delegate('#container', 'click', '.playerAttendanceList > input', (event) => {
   // need player name & value selected
@@ -481,56 +347,23 @@ delegate('#container', 'click', '.playerAttendanceList > input', (event) => {
   // after button clicked to save
   // read back from state to get current state for each player  & push to FB
   
-  state.attendanceRecords.player = playerName
-  state.attendanceRecords.attendanceValue = valueSelected
+  state.attendanceRecords[playerName] = valueSelected
+  console.log(state.attendanceRecords[playerName].valueSelected.value)
+  //state.attendanceRecords.attendanceValue = valueSelected
 
-  state.attendanceRecords.forEach((item) => {
-
-    var attendanceObject = {}
-    attendanceObject.player = item.player
-    attendanceObject.attendance = item.attendanceValue
-    //   // push to array
-    state.attendanceRecords.push(attendanceObject);
-    console.log('pushed records');
-
-  })
 
 });
 
 
 delegate('body', 'click', '#submitAttendanceButton', (event) => { 
   //? Call a function here to loop the Attendance & push to FB? e.g. loopAttendance() 
+  
+  var attendanceRecords = firebase.database().ref('gameRecords/' + state.selectedDate + '/' + state.selectedTeam + '/').set({
+    players : state.attendanceRecords.attendanceValue
+  });
+
   fetchQuotes()
 })
-
-
-//           dataAsJson.contents.quotes.forEach((item) => {
-// 	        var quotesObject = {}
-//           quotesObject.author = item.author
-//           quotesObject.quote = item.quote
-//           //   // push to array
-//           state.quoteOfDay.push(quotesObject);
-//           console.log(state.quoteOfDay);
-//           console.log('THis is state.quoteOfDay: ' + state.quoteOfDay);
-
-
-// delegate('#container', 'click', '____', (event) => {
-//   var selectedRadio = document.querySelector('radio')
-
-  
-
-//   console.log(': ' + selectedTeam);
-
-
-// }
-
-
-
-
-
-
-
-
 
 
 // close main render function
