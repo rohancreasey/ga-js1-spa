@@ -16,7 +16,7 @@
     players : {},
     quoteOfDay : {},
     quoteOfDayArray : [],  
-    groups : ['teamRED','teamBLUE','teamYELLOW'],
+    groups : ['teamRED','teamBLUE','teamYELLOW', 'teamGOLD'],
     teams: [],
     selectedTeam : [],
     selectedCoach : [],
@@ -25,6 +25,11 @@
     attendanceRecords : {}
     }
 
+
+render(state, container)
+
+function render(data, into) {
+
   // Initial Firebase call to populate menu with teams
   firebase.database().ref('teams/').once('value', function(snapshot) {
     state.teams = snapshot.val();
@@ -32,20 +37,12 @@
     console.log(state.teams);
   });
 
-
-render(state, container)
-
-
-function render(data, into) {
-
-
-
   // CALL FUNCTIONS
   renderHeader(state, header);    // render header
 
 // 1a. HEADER - DROP DOWN MENU 
 function renderDropDownItem(item) {
-  return `<a href="#">${item.coach}</a>`     
+  return `<a href="#">${item}</a>`     
 }
 
 // 1b. HEADER 
@@ -56,14 +53,10 @@ function renderHeader(state, header) {
         <a href="#"><h1>Roster Application</h1></a>
       </div>
       <nav>
-       <!-- <section id="search"> -->
-          <!-- <input type="text" name="name" value="">  -->
-          <!-- <div id="search-icon"><img src="images/search.png" alt="" /></div> -->
-        <!-- </section>  -->
         <ul>
           <li><a href="#">Team: <span></span></a>
             <ul id="drop-down-list">
-              ${state.teams.map((item) => {
+              ${state.groups.map((item) => {
               //return renderDropDownItem function
               return `<li>${renderDropDownItem(item)}</li>`
               }).join('')}
@@ -113,8 +106,8 @@ function createNewGameDateFunction(gameDate) {
   if (dateCreate != '') {
 
     var newGame = firebase.database().ref('gameRecords/' + dateCreate + '/' + state.selectedTeam).set({ // set new game date
-      // team: state.selectedTeam,
-      players: state.players
+      team: state.selectedTeam,
+      players: ''
     });
     state.currentGameID = newGame.key;
     console.log('state.currentGameID: ' + state.currentGameID);
@@ -143,20 +136,14 @@ function renderPlayerListOnly(data, into) {
   var playerList = '';  // make empty playerList var
   Object.keys(data.players).forEach((element) => {
   // assign html to playerList
-  playerList += `   
-                <form action="">
+  playerList += `
                 <ul id="player-list-only">
-                <li><span>${data.players[element].name}&nbsp;&nbsp;</span></li>
+                <li style="line-height:16px;">${data.players[element].name}&nbsp;&nbsp;</li>
                 </ul>
-                </form>
                 `
   });
   into.innerHTML = `
                 ${playerList}
-                
-                <div>
-                
-                </div>
                 `
   console.log('playerList called');
   // console.log(playerList);
@@ -177,7 +164,6 @@ function renderPlayerListOnly(data, into) {
     console.log('playerAttendance assigned'); 
     into.innerHTML = `
                      ${playerList}
-                     
                      <div class="showQuotes">
                        <button id="submitAttendanceButton" class="showQuotesButton" style="margin:40px 0 0 20px;">Submit Attendance Record</button><br/>
                      </div>
@@ -216,10 +202,10 @@ function fetchQuotes(){
 delegate('#drop-down-list', 'click', 'a', (event) => {
   var selectedTeam = event.delegateTarget.innerHTML;
   state.selectedTeam = selectedTeam;
-  //get coaches
+
   console.log('This is the var selectedTeam: ' + selectedTeam);
   console.log('This is the array state.selectedTeam: ' + state.selectedTeam);
-  
+
   renderTeamDetails(state, teamDetailsContainer);
 });
 
@@ -235,60 +221,41 @@ delegate('#drop-down-list', 'click', 'a', (players) => {
     
     renderPlayerListOnly(state, playerContainer)
     renderGameChoices(state, choiceButtonsContainer);
-
   })
   })
-
 })
 
-
-// on create button click, create new game entry
 delegate('body', 'click', '#button1', createNewGameDateFunction)
 
-// NOTE - function expecting two params, was just receiving event. Need to call as funtion within delegate* Every delegate receives a param, which is the event. Call it that.
 delegate('body', 'click', '#button1', (event) => {
  renderPlayerAttendance(state, playerContainer)
 })
- 
-// on delete button click, delete function
+
 delegate('body', 'click', '#button3', deleteGameDateFunction)
 
 delegate('#container', 'click', '.playerAttendanceList > input', (event) => {
-  // need player name & value selected
-  var valueSelected = event.delegateTarget.value // event on delgate Target... 
-  var playerName = closest(event.delegateTarget, '[data-name]').getAttribute('data-name')
+  var valueSelected = event.delegateTarget.value
+  var players = closest(event.delegateTarget, '[data-name]').getAttribute('data-name')
   
   // TODO push to state
   // after button clicked to save
   // read back from state to get current state for each player  & push to FB
-  
-  state.attendanceRecords[playerName] = valueSelected
-  console.log(state.attendanceRecords[playerName].valueSelected.value)
+  // assign selected value to attendanceRecords object, playerName key, in state
+  state.attendanceRecords[players] = valueSelected
+  //console.log(state.attendanceRecords[playerName].valueSelected.value)
   //state.attendanceRecords.attendanceValue = valueSelected
-
-
 });
 
 
 delegate('body', 'click', '#submitAttendanceButton', (event) => { 
-  //? Call a function here to loop the Attendance & push to FB? e.g. loopAttendance() 
-
-//TODO HERE OR BELOW>>>>
-   fetchQuotes()
-
-  var attendanceRecords = firebase.database().ref('gameRecords/' + state.selectedDate + '/' + state.selectedTeam + '/players/').update({
-    players : state.attendanceRecords.attendanceValue
+  var attendanceRecords = firebase.database().ref('gameRecords/' + state.selectedDate + '/' + state.selectedTeam).update({
+    players : state.attendanceRecords
   });
-
-
+renderQuoteContainer(state, container)
+fetchQuotes()
 })
 
 
 // close main render function
   }
 })()
-
-
-
-
-
