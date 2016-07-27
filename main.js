@@ -29,6 +29,16 @@ render(state, container)
 function render(data, into) {
   // TODO
 
+ firebase.database().ref('teams/').once('value', function(snapshot) {
+    state.teams = snapshot.val();
+    console.log('Teams LOADED');
+    console.log(state.teams);
+    // renderPlayerList(state, document.querySelector('#container'))
+  });
+
+  // firebase.database().ref('coaches/').once('value', function(snapshot) {
+  //   state.coaches = snapshot.val();
+
   // CALL FUNCTIONS
   renderHeader(state, header);    // render header
   // MOVED renderGameChoices(state, choiceButtonsContainer);   // render home page buttons
@@ -367,7 +377,20 @@ function fetchQuotes(){
 // https://crossorigin.me/http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1
 */
 
+function loopAttendance(){
+  
+  state.attendanceRecords.forEach((item) => {
 
+    
+	        var attendanceObject = {}
+          attendanceObject.player = item.player
+          attendanceObject.attendance = item.attendanceValue
+          //   // push to array
+          state.attendanceRecords.push(attendanceObject);
+          console.log('pushed records');
+	  })
+      //renderQuoteContainer(state, container)
+	};
 
 
 
@@ -444,14 +467,6 @@ delegate('body', 'click', '#button1', (event) => {
  renderPlayerAttendance(state, playerContainer)
 })
  
-//  OLD - render Player List on button press
-// delegate('body', 'click', '#button1', (players) => {
-//   firebase.database().ref('players/').once('value', function(snapshot) {
-//     state.players = snapshot.val();
-//     console.log(state);
-//     renderPlayerList(state, document.querySelector('#playerContainer'))
-//   })
-// })
 
 // on delete button click, delete function
 delegate('body', 'click', '#button3', deleteGameDateFunction)
@@ -459,19 +474,35 @@ delegate('body', 'click', '#button3', deleteGameDateFunction)
 
 delegate('#container', 'click', '.playerAttendanceList > input', (event) => {
   // need player name & value selected
-  var valueSelected = event.delegateTarget.value // TODO event.. .is event delgate Target... 
+  var valueSelected = event.delegateTarget.value // event on delgate Target... 
   var playerName = closest(event.delegateTarget, '[data-name]').getAttribute('data-name')
+  
+  // TODO push to state
+  // after button clicked to save
+  // read back from state to get current state for each player  & push to FB
   
   state.attendanceRecords.player = playerName
   state.attendanceRecords.attendanceValue = valueSelected
 
-  console.log(state.attendanceRecords);
+  state.attendanceRecords.forEach((item) => {
 
-  // push to state
-  // after button clicked to save
-  // read back from state to get current state for each player  & push to FB
+    var attendanceObject = {}
+    attendanceObject.player = item.player
+    attendanceObject.attendance = item.attendanceValue
+    //   // push to array
+    state.attendanceRecords.push(attendanceObject);
+    console.log('pushed records');
+
+  })
 
 });
+
+
+delegate('body', 'click', '#submitAttendanceButton', (event) => { 
+  //? Call a function here to loop the Attendance & push to FB? e.g. loopAttendance() 
+  fetchQuotes()
+})
+
 
 //           dataAsJson.contents.quotes.forEach((item) => {
 // 	        var quotesObject = {}
@@ -494,11 +525,7 @@ delegate('#container', 'click', '.playerAttendanceList > input', (event) => {
 // }
 
 
-delegate('body', 'click', '#submitAttendanceButton', (event) => {
-  fetchQuotes()
-  // stack overflow TODO
-  //document.querySelector('input[name="attendance"]:checked').value; // collects first radio box set
-})
+
 
 
 
