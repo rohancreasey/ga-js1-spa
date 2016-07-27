@@ -16,7 +16,7 @@
     players : {},
     quoteOfDay : {},
     quoteOfDayArray : [],  
-    groups : ['teamA','teamB','teamC'],
+    groups : ['teamRED','teamBLUE','teamYELLOW'],
     teams: [],
     selectedTeam : [],
     selectedCoach : [],
@@ -25,33 +25,30 @@
     attendanceRecords : {}
     }
 
-
-render(state, container)
-
-function render(data, into) {
-  // TODO
-
- firebase.database().ref('teams/').once('value', function(snapshot) {
+  // Initial Firebase call to populate menu with teams
+  firebase.database().ref('teams/').once('value', function(snapshot) {
     state.teams = snapshot.val();
     console.log('Teams LOADED');
     console.log(state.teams);
-    console.log(state.teams.teamRED.coach);
   });
+
+
+render(state, container)
+
+
+function render(data, into) {
 
 
 
   // CALL FUNCTIONS
   renderHeader(state, header);    // render header
 
-
-// 1. HEADER CODE
-
-// DROP DOWN MENU 
+// 1a. HEADER - DROP DOWN MENU 
 function renderDropDownItem(item) {
-  return `<a href="#">${item}</a>`     
+  return `<a href="#">${item.coach}</a>`     
 }
 
-// HEADER 
+// 1b. HEADER 
 function renderHeader(state, header) {
   header.innerHTML = `
     <section class="wrapper">
@@ -59,14 +56,14 @@ function renderHeader(state, header) {
         <a href="#"><h1>Roster Application</h1></a>
       </div>
       <nav>
-        <section id="search">
-          <input type="text" name="name" value="">
+       <!-- <section id="search"> -->
+          <!-- <input type="text" name="name" value="">  -->
           <!-- <div id="search-icon"><img src="images/search.png" alt="" /></div> -->
-        </section>
+        <!-- </section>  -->
         <ul>
           <li><a href="#">Team: <span></span></a>
             <ul id="drop-down-list">
-              ${state.groups.map((item) => {
+              ${state.teams.map((item) => {
               //return renderDropDownItem function
               return `<li>${renderDropDownItem(item)}</li>`
               }).join('')}
@@ -79,11 +76,6 @@ function renderHeader(state, header) {
     `
 }
 
-// TEAM SELECTION FUNCTIONS
-
-
-// VIEW 1a -- TEAM DETAILS
-
 function renderTeamDetails(state, teamDetailsContainer){
   teamDetailsContainer.innerHTML = 
     `
@@ -91,9 +83,6 @@ function renderTeamDetails(state, teamDetailsContainer){
                     <div id"coach-name>Coach: <strong>Coachy McCoach</strong></div>
     `
 }
-
-
-// VIEW 1b -- BUTTON CHOICE
 
 function renderGameChoices(state, choiceButtonsContainer){
   choiceButtonsContainer.innerHTML = `
@@ -104,26 +93,18 @@ function renderGameChoices(state, choiceButtonsContainer){
             <button id="button1" class="gameChoiceButton">Create New Record</button><br/>
           </div>
           <div class="gameChoicesDiv">
-            <span style="">View Games:&nbsp; </span>
-            <input type="date" id="view-gameDate" />
-            <button id="button2" class="gameChoiceButton">View Team Games</button><br/>
-          </div>
-          <div class="gameChoicesDiv">
             <span style="">Delete a Game Date:&nbsp; </span>
             <input type="date" id="delete-gameDate" />
             <button id="button3" class="gameChoiceButton">Delete a Game Record</button><br/>
           </div>
-        </div>
+          <div class="gameChoicesDiv">
+            <span style="">View Games:&nbsp; </span>
+            
+            <button id="button2" class="gameChoiceButton">View Team Games</button><br/>
+          </div>
       `
 }
 
-
-
-// ADD GAME ACTIONS
-//debugger
-
-
-// Create New Game Function
 function createNewGameDateFunction(gameDate) {
   console.log('create-called');
   var dateCreate = document.getElementById('create-gameDate').value;  // get selected date, assign to dateCreate 
@@ -132,23 +113,17 @@ function createNewGameDateFunction(gameDate) {
   if (dateCreate != '') {
 
     var newGame = firebase.database().ref('gameRecords/' + dateCreate + '/' + state.selectedTeam).set({ // set new game date
-      team: state.selectedTeam,
+      // team: state.selectedTeam,
       players: state.players
     });
     state.currentGameID = newGame.key;
     console.log('state.currentGameID: ' + state.currentGameID);
-    // console.log('currentGameID.key: ' + currentGameID.key);
     console.log('Date added to database: ' + dateCreate);
-    // console.log('selectedTeam var = ' + selectedTeam)    // check
-    //return currentGameID.key;
-  } else {          // check - if no date selected, alert
+  } else {
     alert('Please select a new game date.');
   }
 
 }
-
-
-// DELETE GAME ACTIONS
 
 function deleteGameDateFunction(gameDate) {
   console.log('delete-called');
@@ -164,33 +139,28 @@ function deleteGameDateFunction(gameDate) {
     }
 }
 
-
-
-// VIEW 2 -- TEAM PLAYER LIST
-
-  function renderPlayerListOnly(data, into) {
-    var playerList = '';  // make empty playerList var
-    Object.keys(data.players).forEach((element) => {
-    // assign html to playerList
-    playerList += `   
-                  <form action="">
-                  <ul id="player-list-only">
-                    <li><span>${data.players[element].name}&nbsp;&nbsp;</span></li>
-                  </ul>
-                  </form>
-                  `
-    });
-    into.innerHTML = `
-                     ${playerList}
-                     
-                     <div>
-                     
-                     </div>
-                    `
-    console.log('playerList called');
-    // console.log(playerList);
+function renderPlayerListOnly(data, into) {
+  var playerList = '';  // make empty playerList var
+  Object.keys(data.players).forEach((element) => {
+  // assign html to playerList
+  playerList += `   
+                <form action="">
+                <ul id="player-list-only">
+                <li><span>${data.players[element].name}&nbsp;&nbsp;</span></li>
+                </ul>
+                </form>
+                `
+  });
+  into.innerHTML = `
+                ${playerList}
+                
+                <div>
+                
+                </div>
+                `
+  console.log('playerList called');
+  // console.log(playerList);
 }
-
 
   function renderPlayerAttendance(data, into) {
     var playerList = '';  // make empty playerList var
@@ -209,13 +179,11 @@ function deleteGameDateFunction(gameDate) {
                      ${playerList}
                      
                      <div class="showQuotes">
-                       <button id="submitAttendanceButton" class="showQuotesButton" style="margin-top:40px;">Show Quotes</button><br/>
+                       <button id="submitAttendanceButton" class="showQuotesButton" style="margin:40px 0 0 20px;">Submit Attendance Record</button><br/>
                      </div>
                      `
     console.log('playerAttendance called');
-    // console.log(playerList);
 }
-
 
 function renderQuoteContainer(data, container) {
   container.innerHTML = `
@@ -224,10 +192,6 @@ function renderQuoteContainer(data, container) {
     <p>- ${state.quoteOfDay.author}</p>
   `
 }
-
-
-
-
 
 // FETCH QUOTES (max 10 per hour)
 
@@ -244,55 +208,6 @@ function fetchQuotes(){
 	  renderQuoteContainer(state, container)
       })
 };
-
-
-// function fetchQuotes(){
-// 	  fetch('http://quotes.rest/qod.json')
-// 	    .then(function(response) {
-// 	      return response.json();
-// 	    }).then(function(dataAsJson) {
-//           console.log(dataAsJson);
-//           // loop through data
-//           dataAsJson.contents.quotes.forEach((item) => {
-// 	        var quotesObject = {}
-//           quotesObject.author = item.author
-//           quotesObject.quote = item.quote
-//           //   // push to array
-//           state.quoteOfDay.push(quotesObject);
-//           console.log(state.quoteOfDay);
-//           console.log('THis is state.quoteOfDay: ' + state.quoteOfDay);
-// 	  })
-//       renderQuoteContainer(state, container)
-// 	})};
-  
-/* second quotes unrequired
-  function fetchQuotesOnDesign(){
-	  fetch('https://crossorigin.me/http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1')
-	    .then(function(response) {
-	      return response.json();
-	    }).then(function(dataAsJson) {
-          console.log(dataAsJson);
-          // loop through data
-          dataAsJson.contents.quotes.forEach((item) => {
-	        var quotesObject = {}
-          quotesObject.author = item.author
-          quotesObject.quote = item.quote
-          //   // push to array
-          state.quoteOfDay.push(quotesObject);
-          console.log(state.quoteOfDay);
-	  })
-      // renderArticleListContainer(state, container)
-	})};
-
-// http://quotes.rest/qod.json
-// http://quotes.rest/qod.json?category=management'
-// https://crossorigin.me/http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1
-*/
-
-
-
-
-
 
 
 // delegates 
@@ -357,12 +272,15 @@ delegate('#container', 'click', '.playerAttendanceList > input', (event) => {
 
 delegate('body', 'click', '#submitAttendanceButton', (event) => { 
   //? Call a function here to loop the Attendance & push to FB? e.g. loopAttendance() 
-  
-  var attendanceRecords = firebase.database().ref('gameRecords/' + state.selectedDate + '/' + state.selectedTeam + '/').set({
+
+//TODO HERE OR BELOW>>>>
+   fetchQuotes()
+
+  var attendanceRecords = firebase.database().ref('gameRecords/' + state.selectedDate + '/' + state.selectedTeam + '/players/').update({
     players : state.attendanceRecords.attendanceValue
   });
 
-  fetchQuotes()
+
 })
 
 
