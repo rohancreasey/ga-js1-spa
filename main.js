@@ -182,7 +182,7 @@ function renderQuoteContainer(data, container) {
 // FETCH QUOTES (max 10 per hour)
 
 function fetchQuotes(){
-	  fetch('http://quotes.rest/qod.json')
+	  fetch('https://crossorigin.me/http://quotes.rest/qod.json')
 	    .then(function(response) {
 	      return response.json();
 	    }).then(function(dataAsJson) {
