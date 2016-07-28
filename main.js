@@ -236,14 +236,7 @@ delegate('body', 'click', '#button3', deleteGameDateFunction)
 delegate('#container', 'click', '.playerAttendanceList > input', (event) => {
   var valueSelected = event.delegateTarget.value
   var players = closest(event.delegateTarget, '[data-name]').getAttribute('data-name')
-  
-  // TODO push to state
-  // after button clicked to save
-  // read back from state to get current state for each player  & push to FB
-  // assign selected value to attendanceRecords object, playerName key, in state
   state.attendanceRecords[players] = valueSelected
-  //console.log(state.attendanceRecords[playerName].valueSelected.value)
-  //state.attendanceRecords.attendanceValue = valueSelected
 });
 
 
@@ -255,7 +248,6 @@ delegate('body', 'click', '#submitAttendanceButton', (event) => {
   console.log(state.selectedDate);
   console.log(state.selectedTeam);
   console.log(state.attendanceRecords);
-renderQuoteContainer(state, container)
 fetchQuotes()
 })
 
